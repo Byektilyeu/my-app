@@ -43,7 +43,7 @@ function HomePage(props) {
       <div>
         <MyNavbar />
         <hr />
-        <div>cards</div>
+        <div>cards beka hahaha</div>
       </div>
     </Layout>
   );
