@@ -12,7 +12,6 @@ import GetCategory from "./Components/GetCategory/index";
 
 const App = () => {
   return (
-<<<<<<< HEAD
     <BrowserRouter>
       <div>
         <Switch>
@@ -23,24 +22,6 @@ const App = () => {
         </Switch>
       </div>
     </BrowserRouter>
-=======
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          sdjgjsdhgjas
-        </a>
-      </header>
-    </div>
->>>>>>> 5b97d98ee350ff1970fc165b8b671b8a4eadf528
   );
 };
 export default App;
