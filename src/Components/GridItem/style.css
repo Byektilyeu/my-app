@@ -1,0 +1,73 @@
+@media (max-width: 500px) {
+  @import url("https://fonts.googleapis.com/css2?family=Roboto:wght@500&display=swap");
+  #grid {
+    /* background: rgb(235, 236, 127); */
+    /* border: #333 1 solid; */
+    /* border-style: solid; */
+    border-radius: 5px;
+    /* padding: 0.5rem; */
+    /* margin: 0.5rem 0; */
+    margin: 5px;
+    overflow: hidden;
+    box-shadow: 2px 5px 25px rgba(0, 0, 0, 0.2);
+  }
+  /* #card:hover {
+      background: rgb(166, 235, 154);
+    } */
+
+  #grid .grid-img {
+    position: static;
+  }
+
+  #grid .grid-img img {
+    border-radius: 10px;
+    flex: 1;
+    height: 20vh;
+    padding: 0.5rem;
+    margin: 0.2rem;
+    /* width: 80vw; */
+  }
+
+  #grid .grid-img p {
+    position: absolute;
+    /* position: static; */
+    /* background-color: blueviolet; */
+    /* display: block; */
+    color: #555;
+    font-family: "Roboto", sans-serif;
+    margin-top: -1.2rem;
+    margin-left: 7rem;
+  }
+
+  #grid .grid-text {
+    background: no-repeat center center/cover rgb(41, 146, 73);
+    height: 2rem;
+    margin: 0.3rem;
+    border-radius: 5px;
+  }
+
+  #grid .grid-text p {
+    padding-top: 0.4rem;
+    color: #fff;
+    font-family: "Roboto", sans-serif;
+    font-size: 15px;
+    text-align: center;
+  }
+
+  .genname0450 {
+    display: flex;
+    align-items: center;
+    align-self: center;
+    background: #fff;
+    height: 9vh;
+    padding-top: 1rem;
+    box-shadow: 2px 5px 25px rgba(0, 0, 0, 0.02);
+  }
+
+  .genname0450 p {
+    font-family: "Roboto", sans-serif;
+    font-size: 12px;
+    /* text-align: center; */
+    padding: 0.5rem;
+  }
+}

@@ -1,11 +1,18 @@
 @import url("https://fonts.googleapis.com/css2?family=Roboto:wght@700&display=swap");
 
-/* #navbar {
-  margin-top: 0;
+/* #menu-navbar {
+  display: flex;
+  width: 100%;
 } */
 
-#navbar p {
-  padding: 1rem;
+#menu-navbar button {
+  border: none;
+  background: #fff;
+}
+
+#menu-navbar p {
+  padding-bottom: 1rem;
+  top: 0;
   margin-bottom: 0;
   color: #333;
   text-align: center;
@@ -15,10 +22,10 @@
   border-radius: 10px;
 }
 
-/* #navbar img {
-  top: 0.7rem;
+#menu-navbar img {
+  top: 1.1rem;
   left: 1rem;
   position: absolute;
   z-index: 1;
   height: 5.5vh;
-} */
+}

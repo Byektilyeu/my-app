@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Row, Col } from "react-bootstrap";
 import { SERVERAPI } from "../../Constants/Routes";
-import HomePageGridItem from "../HomePageGridItem";
+import HomePageGridItem from "../GridItem";
 
 function GetCategory(props) {
   const [categ, setCateg] = useState([]);
