@@ -1,25 +1,29 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import axios from "axios";
 import { Row, Col } from "react-bootstrap";
 import { SERVERAPI } from "../../Constants/Routes";
-import HomePageGridItem from "../GridItem";
+import GridItem from "../GridItem";
+import "./style.css";
 
 function GetCategory(props) {
   const [categ, setCateg] = useState([]);
-  const [id, setId] = useState(1000083);
+  var el = useRef();
+  // var categID = props.location.hash.replace("#", "");
+  // console.log("hash________________________________________", props);
 
   useEffect(() => {
-    setId(props.data);
     getCategMenu();
-  }, [id]);
+  }, []);
 
   const getCategMenu = () => {
     axios
       .post(`${SERVERAPI}/api/v1/category`, {
-        category: 1000118,
+        category: props.data.Ident,
       })
       .then((result) => {
         setCateg(result.data.data);
+        if (props.selectedCategoryId == props.data.Ident)
+          el.current.scrollIntoView();
         console.log("ahhcjahbchbhac", result.data.data);
       })
       .catch((err) => {
@@ -28,17 +32,19 @@ function GetCategory(props) {
   };
 
   return (
-    <div className="card-datas">
-      <p> tttttttt{props.data}</p>
+    <div className="card-datas" ref={el}>
+      <p>{props.data.Name}</p>
+      <hr style={{ height: "2px" }} />
       <Row>
-        {categ.map((el, index) => (
-          <Col xs="6" md="3" key={index} style={{ color: "black" }}>
-            <HomePageGridItem
+        {categ.map((el) => (
+          <Col xs="6" className="col" key={el.Code}>
+            <GridItem
               Comment={el.Comment}
               AltName={el.AltName}
               Name={el.Name}
-              Price={el.menuPriceValue}
-              Instruct={el.Instruct}
+              Price={el.priceOrderMenu}
+              gendescription0450={el.gendescription0450}
+              genname0450={el.genname0450}
             />
           </Col>
         ))}

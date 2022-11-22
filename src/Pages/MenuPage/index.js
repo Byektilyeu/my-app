@@ -3,26 +3,26 @@ import Layout from "../../Components/Layout";
 import MenuNavbar from "../../Components/MenuNavbar/index";
 import { SERVERAPI } from "../../Constants/Routes";
 import axios from "axios";
-import { Row, Col } from "react-bootstrap";
 import back from "../../Assets/back.png";
-import GridItem from "../../Components/GridItem/index";
-import { useHistory } from "react-router-dom";
 import "./style.css";
+import GetCategory from "../../Components/GetCategory";
 
+///
 function MenuPage(props) {
-  let history = useHistory();
+  // const myref = useRef(null);
+  // let history = useHistory();
   const [categories, setCategories] = useState([]);
-  const [categ, setCateg] = useState([]);
+  // const [categ, setCateg] = useState([]);
+  // const [hashData, setHashData] = useState("");
   var categID = props.location.hash.replace("#", "");
-  console.log("categID========================", categID);
+  console.log("categID========================", props);
 
   useEffect(() => {
     getCategories();
-    getCategMenu(categID);
-    console.log(
-      "props.params =========>>>>>>>>>>>>>>>>>>>>",
-      props.location.hash
-    );
+    // console.log(
+    //   "props.params =========>>>>>>>>>>>>>>>>>>>>",
+    //   props.location.hash
+    // );
   }, [categID]);
 
   const getCategories = () => {
@@ -36,64 +36,47 @@ function MenuPage(props) {
       });
   };
 
-  const getCategMenu = (catID) => {
-    axios
-      .post(`${SERVERAPI}/api/v1/category`, {
-        category: catID,
-      })
-      .then((result) => {
-        setCateg(result.data.data);
-        console.log("data", result.data.data);
-      })
-      .catch((err) => {
-        console.log("err: ", err.message);
-      });
-  };
-
-  const setHash = (ident) => {
-    window.location.hash = `#${ident}`;
-  };
+  // const setHash = (ident) => {
+  //   window.location.hash = `#${ident}`;
+  //   setHashData(ident);
+  //   myref.current.scrollIntoView();
+  // };
 
   return (
     <div>
       <Layout>
         <header>
           <div id="nav-m">
-            <MenuNavbar title="Рестораны меню" back={back} />
-            {/* <button onClick={history.goBack}>hahahha</button> */}
+            <MenuNavbar
+              title="Рестораны меню"
+              back={back}
+              hallplan={props.match.params.hallplansid}
+              table={props.match.params.tableid}
+            />
             <div className="nav-menu">
               {categories.map((el) => (
-                <div onClick={() => setHash(el.Ident)} className="btn ">
-                  <p>{el.Name}</p>
+                <div className="btn">
+                  <a href={`#${el.Ident}`}>
+                    <p>{el.Name}</p>
+                  </a>
                 </div>
               ))}
             </div>
           </div>
         </header>
         <div className="container1">
-          <Row>
-            {categ.map((el) => (
-              <Col xs="6" className="col" key={el.Code}>
-                <GridItem
-                  Comment={el.Comment}
-                  AltName={el.AltName}
-                  Name={el.Name}
-                  Price={el.priceOrderMenu}
-                  gendescription0450={el.gendescription0450}
-                  genname0450={el.genname0450}
+          <div>
+            {categories.map((category, i) => (
+              <div className="menu-body" id={category.Ident}>
+                <GetCategory
+                  key={category.Ident}
+                  data={category}
+                  selectedCategoryId={categID}
                 />
-              </Col>
-            ))}
-          </Row>
-        </div>
-
-        {/* <div className="container">
-          <div className="item">
-            {categ.map((el) => (
-              <p>{el.AltName}</p>
+              </div>
             ))}
           </div>
-        </div> */}
+        </div>
       </Layout>
     </div>
   );

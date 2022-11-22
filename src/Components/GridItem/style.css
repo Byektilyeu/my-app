@@ -39,6 +39,11 @@
     margin-left: 7rem;
   }
 
+  #grid .grid-img .no-img {
+    height: 4rem;
+    background: #fff;
+  }
+
   #grid .grid-text {
     background: no-repeat center center/cover rgb(41, 146, 73);
     height: 2rem;
@@ -47,7 +52,7 @@
   }
 
   #grid .grid-text p {
-    padding-top: 0.4rem;
+    padding-top: 0.3rem;
     color: #fff;
     font-family: "Roboto", sans-serif;
     font-size: 15px;

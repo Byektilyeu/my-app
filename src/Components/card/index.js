@@ -1,7 +1,5 @@
-import { Card } from "react-bootstrap";
 import menuKfc from "../../Assets/kfc.png";
-import more from "../../Assets/more.png";
-import React, { useState } from "react";
+import React from "react";
 import "./style.css";
 
 export default ({ Comment, Name }) => {

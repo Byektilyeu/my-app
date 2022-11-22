@@ -51,6 +51,15 @@
   font-family: "Roboto", sans-serif;
   font-size: 0.8rem;
 }
+#nav-m .nav-menu .btn a {
+  text-decoration: none;
+  color: #444;
+}
+
+.menu-body {
+  margin-top: -140px;
+  padding-top: 138px;
+}
 
 .container1 {
   /* padding: 3px; */

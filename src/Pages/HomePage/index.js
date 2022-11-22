@@ -8,6 +8,7 @@ import logoRes from "../../Assets/logoRes.png";
 import Card from "../../Components/card/index";
 import "./style.css";
 import { Link } from "react-router-dom";
+import MenuPage from "../MenuPage";
 
 function HomePage(props) {
   const [categories, setCategories] = useState([]);
@@ -56,8 +57,9 @@ function HomePage(props) {
           </div>
         </header>
 
-        {categories.map((el) => (
+        {categories.map((el, i) => (
           <Link
+            key={i}
             to={`/${props.match.params.hallplansid}/${props.match.params.tableid}/menus#${el.Ident}`}
             style={{ textDecoration: "none", color: "black" }}
           >
