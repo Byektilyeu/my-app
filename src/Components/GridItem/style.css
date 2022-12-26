@@ -50,6 +50,9 @@
     margin: 0.3rem;
     border-radius: 5px;
   }
+  #grid .grid-text:hover {
+    opacity: 0.5;
+  }
 
   #grid .grid-text p {
     padding-top: 0.3rem;

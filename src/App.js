@@ -9,6 +9,7 @@ import MenuPage from "./Pages/MenuPage/index";
 import * as ROUTES from "./Constants/Routes/index";
 import HallPlanPage from "./Pages/HallPlanPage/index";
 import TablePage from "./Pages/TablePage/index";
+import CartPage from "./Pages/CartPage";
 // import GetCategory from "./Components/GetCategory/index";
 
 const App = () => {
@@ -17,10 +18,10 @@ const App = () => {
       <div>
         <Switch>
           <Route exact path={ROUTES.HALLPLAN} component={HallPlanPage} />
+          <Route exact path={ROUTES.BASKET} component={CartPage} />
           <Route exact path={ROUTES.HOMEPAGE} component={HomePage} />
           <Route exact path={ROUTES.MENUPAGE} component={MenuPage} />
           <Route exact path={ROUTES.TABLES} component={TablePage} />
-          {/* <Route exact path={ROUTES.CATEGORYFOODS} component={GetCategory} /> */}
         </Switch>
       </div>
     </BrowserRouter>

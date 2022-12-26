@@ -1,0 +1,104 @@
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@500&display=swap");
+
+.list-nav {
+  background: #fff;
+  width: 100vw;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+}
+
+.list-card {
+  margin: auto;
+  width: 90%;
+  height: 30%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px seagreen solid;
+  /* background: #333; */
+}
+
+.cards .list-card:first-child {
+  margin-top: 5rem;
+}
+
+.list-card .list-card-name {
+  margin-top: 1rem;
+  width: 50%;
+}
+
+.list-card .list-card-name p {
+  font-size: 0.8rem;
+}
+
+.list-card .list-card-price .list-card-quantity {
+  padding: 0 0.8rem;
+  font-size: 1.2rem;
+}
+
+.list-card .list-card-price .card-price {
+  text-align: end;
+  font-size: 0.8rem;
+  font-family: "Roboto", sans-serif;
+  color: #555;
+}
+
+.list-card .list-card-name p,
+.list-card .list-card-quantity {
+  color: #555;
+  font-family: "Roboto", sans-serif;
+}
+
+.list-card .list-card-price .list-card-quantity {
+  color: #555;
+  font-family: "Roboto", sans-serif;
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.list-card .list-card-img img {
+  flex: 1;
+  height: 8vh;
+  /* padding: 0.5rem; */
+  /* width: 80vw; */
+  object-fit: cover;
+}
+
+.total-price {
+  color: #555;
+  font-weight: bold;
+  font-size: 0.8rem;
+  padding-right: 1rem;
+  text-align: end;
+  font-family: "Roboto", sans-serif;
+  margin-top: 0.5rem;
+}
+
+.pay {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.grid-text {
+  background: no-repeat center center/cover rgb(41, 146, 73);
+  height: 2rem;
+  margin: 1rem;
+  border-radius: 5px;
+  padding: 0 3rem;
+}
+
+.grid-text:hover {
+  opacity: 0.5;
+}
+
+.grid-text p {
+  padding-top: 0.3rem;
+  color: #fff;
+  font-family: "Roboto", sans-serif;
+  font-size: 15px;
+  text-align: center;
+}

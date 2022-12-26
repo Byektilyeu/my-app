@@ -10,6 +10,33 @@
   z-index: 1;
   border-radius: 15px;
 }
+/* #nav-m .nav-basket {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+} */
+
+#nav-m .basket img {
+  top: 0.6rem;
+  right: 0.8rem;
+  position: absolute;
+  z-index: 1;
+  height: 6.5vh;
+}
+
+#nav-m .basket p {
+  top: 0.6rem;
+  right: 0.7rem;
+  position: absolute;
+  z-index: 1;
+  color: white;
+  font-family: "Roboto", sans-serif;
+  font-weight: bold;
+  font-size: 0.8rem;
+  background: red;
+  padding: 0 0.3rem;
+  border-radius: 50%;
+}
 
 #nav-m .nav-menu {
   /* background: #333; */

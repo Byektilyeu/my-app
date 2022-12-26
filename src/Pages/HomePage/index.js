@@ -1,48 +1,23 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import Layout from "../../Components/Layout";
 import PageFooter from "../../Components/footer/index";
 import MyNavbar from "../../Components/Navbar";
-import { SERVERAPI } from "../../Constants/Routes";
-import axios from "axios";
 import logoRes from "../../Assets/logoRes.png";
 import Card from "../../Components/card/index";
 import "./style.css";
 import { Link } from "react-router-dom";
-import MenuPage from "../MenuPage";
+
+import * as actionsCategory from "../../redux/actions/categoryActions";
+import * as actionsMenu from "../../redux/actions/menuActions";
+import * as actionsSettings from "../../redux/actions/settingsActions";
+import { connect } from "react-redux";
 
 function HomePage(props) {
-  const [categories, setCategories] = useState([]);
-  // const [categ, setCateg] = useState([]);
-
   useEffect(() => {
-    getCategories();
-    // getCategMenu(1000083);
+    props.loadCategories();
+    props.loadMenu();
+    props.loadSettings();
   }, []);
-
-  const getCategories = () => {
-    axios
-      .get(`${SERVERAPI}/api/v1/categories`)
-      .then((result) => {
-        setCategories(result.data.data);
-      })
-      .catch((err) => {
-        console.log("err: ", err.message);
-      });
-  };
-
-  // const getCategMenu = (catID) => {
-  //   axios
-  //     .post(`${SERVERAPI}/api/v1/category`, {
-  //       category: catID,
-  //     })
-  //     .then((result) => {
-  //       setCateg(result.data.data);
-  //       console.log("data", result.data.data);
-  //     })
-  //     .catch((err) => {
-  //       console.log("err: ", err.message);
-  //     });
-  // };
 
   return (
     <div>
@@ -57,7 +32,7 @@ function HomePage(props) {
           </div>
         </header>
 
-        {categories.map((el, i) => (
+        {props.loadedCategories.map((el, i) => (
           <Link
             key={i}
             to={`/${props.match.params.hallplansid}/${props.match.params.tableid}/menus#${el.Ident}`}
@@ -74,4 +49,20 @@ function HomePage(props) {
   );
 }
 
-export default HomePage;
+const mapStateToProps = (state) => {
+  return {
+    loadedCategories: state.categoryReducer.loadedCategories,
+    loading: state.categoryReducer.loading,
+    loadedMenu: state.menuReducer.loadedMenu,
+  };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    loadCategories: () => dispatch(actionsCategory.loadCategories()),
+    loadMenu: () => dispatch(actionsMenu.loadMenu()),
+    loadSettings: () => dispatch(actionsSettings.loadSettings()),
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(HomePage);

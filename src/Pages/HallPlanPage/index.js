@@ -22,7 +22,7 @@ function HallPlan() {
       .get(`${SERVERAPI}/api/v1/hallplans`)
       .then((result) => {
         setHallplans(result.data.data);
-        console.log("hallplans data", result.data.data);
+        // console.log("hallplans data", result.data.data);
       })
       .catch((err) => console.log(err.message));
   };

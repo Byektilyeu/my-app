@@ -1,13 +1,13 @@
 import "./style.css";
 import { useHistory } from "react-router-dom";
 
-const MenuNavbar = (props) => {
+const CartNavbar = (props) => {
   const history = useHistory();
 
   // console.log("params11111 ____________________", props);
 
   const routeChange = () => {
-    let path = `/${props.hallplan}/${props.table}`;
+    let path = `/${props.hallplan}/${props.table}/menus`;
     history.push(path);
   };
 
@@ -21,4 +21,4 @@ const MenuNavbar = (props) => {
   );
 };
 
-export default MenuNavbar;
+export default CartNavbar;

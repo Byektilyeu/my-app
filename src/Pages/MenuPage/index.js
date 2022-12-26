@@ -1,46 +1,29 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Layout from "../../Components/Layout";
 import MenuNavbar from "../../Components/MenuNavbar/index";
-import { SERVERAPI } from "../../Constants/Routes";
-import axios from "axios";
 import back from "../../Assets/back.png";
+import basket from "../../Assets/basket6.jpg";
 import "./style.css";
-import GetCategory from "../../Components/GetCategory";
+import * as actionsCategory from "../../redux/actions/categoryActions";
+import * as actionsMenu from "../../redux/actions/menuActions";
+import { connect } from "react-redux";
 
-///
+import { Link } from "react-router-dom";
+
+import { Row, Col } from "react-bootstrap";
+import GridItem from "../../Components/GridItem/index";
+
 function MenuPage(props) {
-  // const myref = useRef(null);
-  // let history = useHistory();
-  const [categories, setCategories] = useState([]);
-  // const [categ, setCateg] = useState([]);
-  // const [hashData, setHashData] = useState("");
   var categID = props.location.hash.replace("#", "");
-  console.log("categID========================", props);
+  const [alState, setAlState] = useState(false);
+
+  // setAlState(props.alertState);
 
   useEffect(() => {
-    getCategories();
-    // console.log(
-    //   "props.params =========>>>>>>>>>>>>>>>>>>>>",
-    //   props.location.hash
-    // );
-  }, [categID]);
-
-  const getCategories = () => {
-    axios
-      .get(`${SERVERAPI}/api/v1/categories`)
-      .then((result) => {
-        setCategories(result.data.data);
-      })
-      .catch((err) => {
-        console.log("err: ", err.message);
-      });
-  };
-
-  // const setHash = (ident) => {
-  //   window.location.hash = `#${ident}`;
-  //   setHashData(ident);
-  //   myref.current.scrollIntoView();
-  // };
+    // props.loadCategories();
+    // props.loadMenu();
+    console.log(props.alertState);
+  }, [props.alertState]);
 
   return (
     <div>
@@ -53,9 +36,19 @@ function MenuPage(props) {
               hallplan={props.match.params.hallplansid}
               table={props.match.params.tableid}
             />
+
+            <Link
+              to={`/${props.match.params.hallplansid}/${props.match.params.tableid}/basket`}
+            >
+              <div className="basket">
+                <img src={basket}></img>
+                <p>{props.cartNumber}</p>
+              </div>
+            </Link>
+
             <div className="nav-menu">
-              {categories.map((el) => (
-                <div className="btn">
+              {props.loadedCategories.map((el, i) => (
+                <div key={i} className="btn">
                   <a href={`#${el.Ident}`}>
                     <p>{el.Name}</p>
                   </a>
@@ -66,13 +59,28 @@ function MenuPage(props) {
         </header>
         <div className="container1">
           <div>
-            {categories.map((category, i) => (
-              <div className="menu-body" id={category.Ident}>
-                <GetCategory
-                  key={category.Ident}
-                  data={category}
-                  selectedCategoryId={categID}
-                />
+            {props.loadedCategories.map((category, i) => (
+              <div key={i} className="menu-body" id={category.Ident}>
+                <p>{category.Name}</p>
+                <hr style={{ height: "2px" }} />
+                <Row>
+                  {props.loadedMenu.map(
+                    (el) =>
+                      el.mainParentIdent === category.Ident && (
+                        <Col xs="6" className="col" key={el.Code}>
+                          <GridItem
+                            item={el}
+                            Comment={el.Comment}
+                            AltName={el.AltName}
+                            Name={el.Name}
+                            Price={el.priceOrderMenu}
+                            gendescription0450={el.gendescription0450}
+                            genname0450={el.genname0450}
+                          />
+                        </Col>
+                      )
+                  )}
+                </Row>
               </div>
             ))}
           </div>
@@ -82,4 +90,23 @@ function MenuPage(props) {
   );
 }
 
-export default MenuPage;
+const mapStateToProps = (state) => {
+  console.log(" state all ", state);
+  return {
+    loadedCategories: state.categoryReducer.loadedCategories,
+    loading: state.categoryReducer.loading,
+    loadedMenu: state.menuReducer.loadedMenu,
+    itemsCart: state.cartReducer.Carts,
+    alertState: state.cartReducer.alertState,
+    cartNumber: state.cartReducer.numberCart,
+  };
+};
+
+// const mapDispatchToProps = (dispatch) => {
+//   return {
+//     loadCategories: () => dispatch(actionsCategory.loadCategories()),
+//     loadMenu: () => dispatch(actionsMenu.loadMenu()),
+//   };
+// };
+
+export default connect(mapStateToProps)(MenuPage);

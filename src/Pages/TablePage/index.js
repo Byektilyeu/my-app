@@ -24,7 +24,7 @@ function TablePage(props) {
         hallPlansIdent: props.match.params.hallplansid,
       })
       .then((result) => {
-        console.log("tables data", result.data.data);
+        // console.log("tables data", result.data.data);
         setTable(result.data.data);
       })
       .catch((err) => console.log(err.message));
