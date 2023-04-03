@@ -1,5 +1,6 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Layout from "../../Components/Layout";
+import { SERVERAPI } from "../../Constants/Routes";
 import {
   IncreaseQuantity,
   DecreaseQuantity,
@@ -10,56 +11,178 @@ import CartNavbar from "../../Components/CartNavbar/index";
 import back from "../../Assets/back.png";
 import { connect } from "react-redux";
 import axios from "axios";
-import https from "https";
+import { setOrderStatusAction } from "../../redux/actions/guidActions";
 
 function CartPage(props) {
+  const [disable, setDisable] = useState(true);
+  const [orders, setOrders] = useState([{}]);
+
   console.log("LoadedSettingsCartPage", props.loadedSettings);
   let ListCart = [];
   let TotalCart = 0;
-  Object.keys(props.itemsHaha).forEach(function (item) {
+  Object.keys(props.loadedCartOrders).forEach(function (item) {
     TotalCart +=
-      (props.itemsHaha[item].quantity * props.itemsHaha[item].price) / 100;
-    ListCart.push(props.itemsHaha[item]);
+      (props.loadedCartOrders[item].quantity *
+        props.loadedCartOrders[item].price) /
+      100;
+    ListCart.push(props.loadedCartOrders[item]);
   });
 
+  //Total Price
   function TotalPrice(price, tonggia) {
     return Number((price * tonggia) / 100).toLocaleString("en-US");
   }
 
-  const createOrder = async () => {
-    const resp = await axios({
-      url: "https://10.0.0.111:8086/rk7api/v0/xmlinterface.xml",
-      method: "POST",
-      auth: {
-        username: "http_user1",
-        password: "9",
-      },
-      httpsAgent: new https.request({
-        rejectUnauthorized: false,
-      }),
-    });
+  // Get monpay token
+  const monpayGetTokenRequest = async () => {
+    // getToken req
+    const configGetToken = {
+      method: "post",
+      url: `${SERVERAPI}/api/v1/monpay/getmonpaytoken`,
+    };
+    let getTokenResult = await axios(configGetToken);
 
-    // var xmlhttp = new XMLHttpRequest();
-    // xmlhttp.open("POST", "https://10.0.0.111:8086/rk7api/v0/xmlinterface.xml");
-    // var xmlDoc;
-    // xmlhttp.onreadystatechange = function () {
-    //   if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-    //     xmlDoc = xmlhttp.responseXML;
-    //     console.log(xmlDoc);
-    //   }
-    // };
-    // xmlhttp.setRequestHeader("Content-Type", "application/xml");
-    // var xml = `<?xml version="1.0" encoding="UTF-8"?>
-    //   <RK7Query>
-    //       <RK7CMD CMD="CreateOrder">
-    //           <Order>
-    //               <Table code="2"/>
-    //               <Waiter code="7"/>
-    //               <Station id="15002"/>
-    //           </Order>
-    //       </RK7CMD>
-    //   </RK7Query>`;
-    // xmlhttp.send(xml);
+    const token = getTokenResult.data.data.access_token;
+
+    // create Invoice request
+    const configCreateInvoice = {
+      method: "post",
+      url: `${SERVERAPI}/api/v1/monpay/createinvoice`,
+      data: {
+        token: getTokenResult.data.data.access_token,
+        hallplanID: props.match.params.hallplansid,
+        tableID: props.match.params.tableid,
+        totalPrice: TotalCart,
+      },
+    };
+    let createInvoiceResult = await axios(configCreateInvoice);
+    const invoiceID = createInvoiceResult.data.data.result.id;
+    console.log(
+      "uri ====>   " + createInvoiceResult.data.data.result.redirectUri
+    );
+
+    // redirectUri open
+    window.open(createInvoiceResult.data.data.result.redirectUri, "_blank");
+    // redirectUri(createInvoiceResult.data.data.result.redirectUri);
+
+    //checkInvoice
+
+    var checkStatus = null;
+    var timer = 0;
+    var interval = setInterval(async () => {
+      const configCheckInvoice = {
+        method: "post",
+        url: `${SERVERAPI}/api/v1/monpay/checkinvoice`,
+        data: {
+          token: token,
+          invoiceID: invoiceID,
+        },
+      };
+      let checkInvoiceResult = await axios(configCheckInvoice);
+      checkStatus = checkInvoiceResult.data.data.result.status;
+      console.log(
+        " checkInvoiceResult ===> ",
+        checkInvoiceResult.data.data.result.status
+      );
+
+      if (checkStatus == "PAID" || timer == 59) {
+        clearInterval(interval);
+      }
+      timer++;
+    }, 3000);
+  };
+
+  // getSystemInfo
+  const getSystemInfo = async () => {
+    const configSystemInfo = {
+      method: "post",
+      url: `${SERVERAPI}/api/v1/rkeeper/getsysteminfo`,
+    };
+    let systemInfo = await axios(configSystemInfo);
+
+    const myObj = JSON.parse(systemInfo.data.data);
+
+    console.log("System info ====> ", myObj.RK7QueryResult._attributes.NetName);
+  };
+
+  // Save Order
+  const saveOrder = async () => {
+    setDisable(false);
+    const cartOrders = props.loadedCartOrders;
+    console.log("CArts: ", cartOrders);
+    const guid = props.loadedGuid;
+    const orderVisit = props.loadedOrderVisit;
+    const orderNumber = props.loadedOrderNumber;
+    var orderStatus = props.loadedOrderStatus;
+    console.log("order Status1 :: ", orderStatus);
+
+    if (orderStatus == 0) {
+      await createOrderMongoDB(orderVisit, orderNumber, guid, cartOrders);
+    } else {
+      await updateOrderMongoDB(guid, cartOrders);
+    }
+
+    orderStatus = orderStatus + 1;
+    props.setOrderStatusAction(orderStatus);
+
+    const configSaveOrder = {
+      method: "post",
+      url: `${SERVERAPI}/api/v1/rkeeper/saveorder`,
+      data: {
+        orders: cartOrders,
+        guid: guid,
+      },
+    };
+    let saveOrder = await axios(configSaveOrder);
+    const myObj = JSON.parse(saveOrder.data.data);
+    console.log("Save order ====> ", myObj);
+  };
+
+  // update order mongoDB
+  const updateOrderMongoDB = async (guid, cartOrders) => {
+    const orderAmount = TotalCart;
+    const configUpdateOrderMongoDB = {
+      method: "post",
+      url: `${SERVERAPI}/api/v1/orders/updateorder`,
+      data: {
+        orderAmount: orderAmount,
+        orderGuid: guid,
+        products: cartOrders,
+      },
+    };
+    let updateOrderMongoDB = await axios(configUpdateOrderMongoDB);
+    console.log("updateOrderMongoDB ====> ", updateOrderMongoDB.data.data);
+  };
+
+  // createOrderMongoDB
+  const createOrderMongoDB = async (
+    orderVisit,
+    orderNumber,
+    guid,
+    cartOrders
+  ) => {
+    const payments = {
+      paymentID: "",
+      amount: 0,
+      paymentStatus: false,
+      invoiceNumber: 0,
+    };
+    const orderAmount = TotalCart;
+    const configCreateOrderMongoDB = {
+      method: "post",
+      url: `${SERVERAPI}/api/v1/orders/createorder`,
+      data: {
+        orderVisit: orderVisit,
+        orderNumber: orderNumber,
+        orderAmount: orderAmount,
+        orderGuid: guid,
+        payments: payments,
+        dDTD: 123456789,
+        products: cartOrders,
+      },
+    };
+    let createOrderMongoDB = await axios(configCreateOrderMongoDB);
+    console.log("createOrderMongoDB ====> ", createOrderMongoDB.data.data);
   };
 
   return (
@@ -107,13 +230,23 @@ function CartPage(props) {
           );
         })}
       </div>
-      <div className="pay">
-        <div onClick={createOrder} className="grid-text">
-          <p>Төлөх</p>
-        </div>
+      <div className="buttons">
         <div className="total-price">
           Нийт дүн: {Number(TotalCart).toLocaleString("en-US")} ₮
         </div>
+        <button onClick={saveOrder} className="button">
+          <p>Захиалга зөв байна</p>
+        </button>
+        <button
+          onClick={monpayGetTokenRequest}
+          disabled={disable}
+          className="button"
+        >
+          <p>Төлөх</p>
+        </button>
+        {/* <div onClick={getSystemInfo} className="grid-text">
+          <p>getSystemInfo</p>
+        </div> */}
       </div>
     </Layout>
   );
@@ -121,10 +254,17 @@ function CartPage(props) {
 
 const mapStateToProps = (state) => {
   console.log("stateCartPage", state.cartReducer.Carts);
+  console.log("loadedGuid", state.guidReducer.guid);
+  console.log("loadedOrderStatus", state.guidReducer.orderStatus);
+
   return {
-    itemsHaha: state.cartReducer.Carts,
+    loadedCartOrders: state.cartReducer.Carts,
     loadedCategories: state.categoryReducer.loadedCategories,
     loadedSettings: state.settingsReducer.loadedSettings,
+    loadedGuid: state.guidReducer.guid,
+    loadedOrderVisit: state.guidReducer.orderVisit,
+    loadedOrderNumber: state.guidReducer.orderNumber,
+    loadedOrderStatus: state.guidReducer.orderStatus,
   };
 };
 
@@ -133,6 +273,8 @@ function mapDispatchToProps(dispatch) {
     DecreaseQuantity: (item) => dispatch(DecreaseQuantity(item)),
     IncreaseQuantity: (item) => dispatch(IncreaseQuantity(item)),
     DeleteCart: (item) => dispatch(DeleteCart(item)),
+    setOrderStatusAction: (orderStatus) =>
+      dispatch(setOrderStatusAction(orderStatus)),
   };
 }
 

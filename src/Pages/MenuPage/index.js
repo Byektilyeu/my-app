@@ -4,26 +4,69 @@ import MenuNavbar from "../../Components/MenuNavbar/index";
 import back from "../../Assets/back.png";
 import basket from "../../Assets/basket6.jpg";
 import "./style.css";
-import * as actionsCategory from "../../redux/actions/categoryActions";
-import * as actionsMenu from "../../redux/actions/menuActions";
 import { connect } from "react-redux";
+import { SERVERAPI } from "../../Constants/Routes";
+import { setGuidAction } from "../../redux/actions/guidActions";
 
 import { Link } from "react-router-dom";
 
 import { Row, Col } from "react-bootstrap";
 import GridItem from "../../Components/GridItem/index";
+import axios from "axios";
 
 function MenuPage(props) {
-  var categID = props.location.hash.replace("#", "");
-  const [alState, setAlState] = useState(false);
-
-  // setAlState(props.alertState);
+  // var categID = props.location.hash.replace("#", "");
 
   useEffect(() => {
+    if (props.loadedGuid == null) {
+      createOrderRequest();
+    }
     // props.loadCategories();
     // props.loadMenu();
     console.log(props.alertState);
   }, [props.alertState]);
+
+  // ***************createOrderRequest******************
+
+  const createOrderRequest = async () => {
+    // const tableID = props.match.params.tableid;
+    const tableID = "1000478";
+    const stationID = "15002";
+    const waiterID = "1000007";
+    const orderType = "2";
+
+    const configCreateOrderRequest = {
+      method: "post",
+      url: `${SERVERAPI}/api/v1/rkeeper/createorder`,
+      data: {
+        tableID: tableID,
+        stationID: stationID,
+        waiterID: waiterID,
+        orderType: orderType,
+      },
+    };
+
+    let createOrderResult = await axios(configCreateOrderRequest);
+
+    const obj = JSON.parse(createOrderResult.data.data);
+    console.log("create order result ======> ", obj);
+    const orderGuid = obj.RK7QueryResult.Order._attributes.guid;
+    const orderVisit = obj.RK7QueryResult.Order._attributes.visit;
+    const orderNumberGuid =
+      obj.RK7QueryResult.Order.ExternalProps.Prop._attributes.name;
+    console.log("orderNumberGuid ==> ", orderNumberGuid);
+    var orderNumber = null;
+    if (orderNumberGuid === "{7DC7AF79-1D00-4573-BE8A-A02C6FA3B430}") {
+      orderNumber =
+        obj.RK7QueryResult.Order.ExternalProps.Prop._attributes.value;
+    } else {
+      console.log(
+        "Aldaa garlaa: OrderNumberGuid baihgui esvel create order-oos utgiig ni avah ued aldaa garsan bna !!!!!!!!!!!!!!!"
+      );
+    }
+
+    props.setGuidAction(orderGuid, orderVisit, orderNumber);
+  };
 
   return (
     <div>
@@ -99,14 +142,15 @@ const mapStateToProps = (state) => {
     itemsCart: state.cartReducer.Carts,
     alertState: state.cartReducer.alertState,
     cartNumber: state.cartReducer.numberCart,
+    loadedGuid: state.guidReducer.guid,
   };
 };
 
-// const mapDispatchToProps = (dispatch) => {
-//   return {
-//     loadCategories: () => dispatch(actionsCategory.loadCategories()),
-//     loadMenu: () => dispatch(actionsMenu.loadMenu()),
-//   };
-// };
+const mapDispatchToProps = (dispatch) => {
+  return {
+    setGuidAction: (guid, orderVisit, orderNumber) =>
+      dispatch(setGuidAction(guid, orderVisit, orderNumber)),
+  };
+};
 
-export default connect(mapStateToProps)(MenuPage);
+export default connect(mapStateToProps, mapDispatchToProps)(MenuPage);

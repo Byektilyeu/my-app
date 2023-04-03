@@ -12,6 +12,7 @@ import categoryReducer from "./redux/reducer/categoryReducer";
 import menuReducer from "./redux/reducer/menuReducer";
 import cartReducer from "./redux/reducer/cartReducer";
 import settingsReducer from "./redux/reducer/settingsReducer";
+import guidReducer from "./redux/reducer/guidReducer";
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
@@ -20,6 +21,7 @@ const reducers = combineReducers({
   menuReducer,
   cartReducer,
   settingsReducer,
+  guidReducer,
 });
 const middleWares = [thunk];
 
