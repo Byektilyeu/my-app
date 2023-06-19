@@ -3,7 +3,7 @@ import Layout from "../../Components/Layout";
 import PageFooter from "../../Components/footer/index";
 import MyNavbar from "../../Components/Navbar";
 import logoRes from "../../Assets/logoRes.png";
-import Card from "../../Components/card/index";
+import CategoriesCard from "../../Components/CategoriesCard/index";
 import "./style.css";
 import { Link } from "react-router-dom";
 
@@ -13,10 +13,13 @@ import * as actionsSettings from "../../redux/actions/settingsActions";
 import { connect } from "react-redux";
 
 function HomePage(props) {
+  const objID = props.match.params.restaurantid;
+
+  // Buh category, menu, settings-uudiig redux-aas load hiij bna
   useEffect(() => {
     props.loadCategories();
-    props.loadMenu();
-    props.loadSettings();
+    props.loadMenu(objID);
+    props.loadSettings(objID);
   }, []);
 
   return (
@@ -35,10 +38,10 @@ function HomePage(props) {
         {props.loadedCategories.map((el, i) => (
           <Link
             key={i}
-            to={`/${props.match.params.hallplansid}/${props.match.params.tableid}/menus#${el.Ident}`}
+            to={`/${props.match.params.restaurantid}/${props.match.params.hallplansid}/${props.match.params.tableid}/menu#${el.Ident}`}
             style={{ textDecoration: "none", color: "black" }}
           >
-            <Card Comment={el.Comment} Name={el.Name} />
+            <CategoriesCard Comment={el.Comment} Name={el.Name} />
           </Link>
         ))}
       </Layout>
@@ -60,8 +63,8 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     loadCategories: () => dispatch(actionsCategory.loadCategories()),
-    loadMenu: () => dispatch(actionsMenu.loadMenu()),
-    loadSettings: () => dispatch(actionsSettings.loadSettings()),
+    loadMenu: (data1) => dispatch(actionsMenu.loadMenu(data1)),
+    loadSettings: (data) => dispatch(actionsSettings.loadSettings(data)),
   };
 };
 

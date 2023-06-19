@@ -8,7 +8,9 @@ export const loadCategories = () => {
     dispatch(loadCategoriesStart());
 
     axios
-      .get(`${SERVERAPI}/api/v1/categories`)
+      .post(`${SERVERAPI}/api/v1/categories`, {
+        objID: 992500001,
+      })
       .then((response) => {
         const loadedCategories = response.data.data;
         // console.log(response.data.data);

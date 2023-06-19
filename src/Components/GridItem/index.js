@@ -33,7 +33,7 @@ const GridItem = (props) => {
     <div>
       <div id="grid">
         <div className="genname0450">
-          <p>{props.genname0450}</p>
+          <p>{props.Name}</p>
         </div>
         <div className="grid-img">
           {props.Comment ? (

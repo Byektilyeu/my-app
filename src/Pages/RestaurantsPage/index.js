@@ -10,25 +10,19 @@ import Layout from "../../Components/Layout";
 import axios from "axios";
 import { SERVERAPI } from "../../Constants/Routes";
 
-function TablePage(props) {
-  const [table, setTable] = useState([]);
-  console.log(props);
+function Restaurants() {
+  const [restaurants, setRestaurants] = useState([]);
 
   useEffect(() => {
-    getTables();
+    getRestaurants();
   }, []);
 
-  // get tables -> mongoDb
-  const getTables = () => {
-    // console.log(props.match.params.hallplansid);
+  // get restaurnts request
+  const getRestaurants = () => {
     axios
-      .post(`${SERVERAPI}/api/v1/tables`, {
-        objID: 992500001,
-        hallPlansIdent: props.match.params.hallplansid,
-      })
+      .post(`${SERVERAPI}/api/v1/restaurants/getrestaurants`)
       .then((result) => {
-        console.log("tables data", result.data.data);
-        setTable(result.data.data);
+        setRestaurants(result.data.data);
       })
       .catch((err) => console.log(err.message));
   };
@@ -36,10 +30,10 @@ function TablePage(props) {
   return (
     <Layout>
       <hr />
-      {table.map((e, index) => (
+      {restaurants.map((e, index) => (
         <Link
           key={index}
-          to={`/${props.match.params.restaurantid}/${props.match.params.hallplansid}/${e.tableIdent}`}
+          to={`/${e.objID}`}
           style={{ textDecoration: "none", color: "black" }}
         >
           <MDBCard
@@ -48,9 +42,9 @@ function TablePage(props) {
             background="white"
             className="mb-3"
           >
-            <MDBCardHeader>{e.tableIdent}</MDBCardHeader>
+            <MDBCardHeader>Object ID: {e.objID}</MDBCardHeader>
             <MDBCardBody className="text-secondary">
-              <MDBCardTitle>{e.tableName}</MDBCardTitle>
+              <MDBCardTitle>Restaurant: {e.name} </MDBCardTitle>
             </MDBCardBody>
           </MDBCard>
         </Link>
@@ -59,4 +53,4 @@ function TablePage(props) {
   );
 }
 
-export default TablePage;
+export default Restaurants;

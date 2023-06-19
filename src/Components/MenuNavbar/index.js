@@ -7,7 +7,7 @@ const MenuNavbar = (props) => {
   // console.log("params11111 ____________________", props);
 
   const routeChange = () => {
-    let path = `/${props.hallplan}/${props.table}`;
+    let path = `/${props.restaurant}/${props.hallplan}/${props.table}`;
     history.push(path);
   };
 

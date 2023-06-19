@@ -2,7 +2,8 @@ import React, { useEffect } from "react";
 
 import Layout from "../../Components/Layout";
 
-function TablePage(props) {
+// busad
+function OrderResultPage(props) {
   useEffect(() => {
     console.log("params", props.match.params);
   }, []);
@@ -16,4 +17,4 @@ function TablePage(props) {
   );
 }
 
-export default TablePage;
+export default OrderResultPage;

@@ -1,4 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
+import { connect } from "react-redux";
+import axios from "axios";
+
 import Layout from "../../Components/Layout";
 import { SERVERAPI } from "../../Constants/Routes";
 import {
@@ -9,17 +12,17 @@ import {
 import "./style.css";
 import CartNavbar from "../../Components/CartNavbar/index";
 import back from "../../Assets/back.png";
-import { connect } from "react-redux";
-import axios from "axios";
 import { setOrderStatusAction } from "../../redux/actions/guidActions";
 
 function CartPage(props) {
   const [disable, setDisable] = useState(true);
-  const [orders, setOrders] = useState([{}]);
+  // const [orders, setOrders] = useState([{}]);
 
-  console.log("LoadedSettingsCartPage", props.loadedSettings);
+  // console.log("LoadedSettingsCartPage", props.loadedSettings);
   let ListCart = [];
   let TotalCart = 0;
+
+  // list cart ruu cart-iin zahialguudiig push hiij hiih
   Object.keys(props.loadedCartOrders).forEach(function (item) {
     TotalCart +=
       (props.loadedCartOrders[item].quantity *
@@ -29,8 +32,8 @@ function CartPage(props) {
   });
 
   //Total Price
-  function TotalPrice(price, tonggia) {
-    return Number((price * tonggia) / 100).toLocaleString("en-US");
+  function TotalPrice(price, quantity) {
+    return Number((price * quantity) / 100).toLocaleString("en-US");
   }
 
   // Get monpay token
@@ -117,9 +120,9 @@ function CartPage(props) {
     console.log("order Status1 :: ", orderStatus);
 
     if (orderStatus == 0) {
-      await createOrderMongoDB(orderVisit, orderNumber, guid, cartOrders);
+      // await createOrderMongoDB(orderVisit, orderNumber, guid, cartOrders);
     } else {
-      await updateOrderMongoDB(guid, cartOrders);
+      // await updateOrderMongoDB(guid, cartOrders);
     }
 
     orderStatus = orderStatus + 1;
@@ -191,6 +194,7 @@ function CartPage(props) {
         <CartNavbar
           title="Таны сагс"
           back={back}
+          restaurant={props.match.params.restaurantid}
           hallplan={props.match.params.hallplansid}
           table={props.match.params.tableid}
         />
@@ -238,7 +242,7 @@ function CartPage(props) {
           <p>Захиалга зөв байна</p>
         </button>
         <button
-          onClick={monpayGetTokenRequest}
+          // onClick={monpayGetTokenRequest}
           disabled={disable}
           className="button"
         >

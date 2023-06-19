@@ -1,15 +1,15 @@
 import axios from "axios";
 import { SERVERAPI } from "../../Constants/Routes/index";
 
-export const loadSettings = () => {
+export const loadSettings = (objID) => {
   return async function (dispatch) {
     dispatch(loadSettingsStart());
 
     axios
-      .get(`${SERVERAPI}/api/v1/settings`)
+      .post(`${SERVERAPI}/api/v1/settings/getsettings`, { objID: objID })
       .then((response) => {
         const loadedSettings = response.data.data;
-        // console.log(response.data.data);
+        console.log("settngs action ", objID);
         dispatch(loadSettingsSuccess(loadedSettings));
       })
       .catch((err) => dispatch(loadSettingsError(err)));

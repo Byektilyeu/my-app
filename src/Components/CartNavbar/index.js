@@ -7,7 +7,7 @@ const CartNavbar = (props) => {
   // console.log("params11111 ____________________", props);
 
   const routeChange = () => {
-    let path = `/${props.hallplan}/${props.table}/menus`;
+    let path = `/${props.restaurant}/${props.hallplan}/${props.table}/menu`;
     history.push(path);
   };
 

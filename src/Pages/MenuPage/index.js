@@ -19,11 +19,12 @@ function MenuPage(props) {
 
   useEffect(() => {
     if (props.loadedGuid == null) {
-      createOrderRequest();
+      // createOrderRequest();
     }
     // props.loadCategories();
     // props.loadMenu();
     console.log(props.alertState);
+    console.log("loaded menu", props.loadedMenu);
   }, [props.alertState]);
 
   // ***************createOrderRequest******************
@@ -76,12 +77,13 @@ function MenuPage(props) {
             <MenuNavbar
               title="Рестораны меню"
               back={back}
+              restaurant={props.match.params.restaurantid}
               hallplan={props.match.params.hallplansid}
               table={props.match.params.tableid}
             />
 
             <Link
-              to={`/${props.match.params.hallplansid}/${props.match.params.tableid}/basket`}
+              to={`/${props.match.params.restaurantid}/${props.match.params.hallplansid}/${props.match.params.tableid}/basket`}
             >
               <div className="basket">
                 <img src={basket}></img>
@@ -108,16 +110,16 @@ function MenuPage(props) {
                 <hr style={{ height: "2px" }} />
                 <Row>
                   {props.loadedMenu.map(
-                    (el) =>
+                    (el, index) =>
                       el.mainParentIdent === category.Ident && (
-                        <Col xs="6" className="col" key={el.Code}>
+                        <Col xs="6" className="col" key={index}>
                           <GridItem
                             item={el}
-                            Comment={el.Comment}
-                            AltName={el.AltName}
-                            Name={el.Name}
+                            Comment={el.comment}
+                            AltName={el.altName}
+                            Name={el.genname0409}
                             Price={el.priceOrderMenu}
-                            gendescription0450={el.gendescription0450}
+                            // gendescription0450={el.gendescription0450}
                             genname0450={el.genname0450}
                           />
                         </Col>

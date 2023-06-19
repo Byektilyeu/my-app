@@ -1,9 +1,12 @@
-export const SETTINGS = "/settings";
-export const ORDERS = "/:hallplansid/:tableid/orderresult";
-export const MENUPAGE = "/:hallplansid/:tableid/menus";
-export const BASKET = "/:hallplansid/:tableid/basket";
-export const HOMEPAGE = "/:hallplansid/:tableid";
-export const HALLPLAN = "/";
-export const TABLES = "/:hallplansid";
+export const SETTINGS = "/createrestaurant/:objid/settings";
+export const RESLIST = "/createrestaurant";
 
-export const SERVERAPI = "http://10.0.0.105:8010";
+export const ORDERS = "/:restaurantid/:hallplansid/:tableid/orderresult";
+export const MENUPAGE = "/:restaurantid/:hallplansid/:tableid/menu";
+export const BASKET = "/:restaurantid/:hallplansid/:tableid/basket";
+export const HOMEPAGE = "/:restaurantid/:hallplansid/:tableid";
+export const HALLPLAN = "/:restaurantid";
+export const TABLES = "/:restaurantid/:hallplansid";
+export const RESTAURANT = "/";
+
+export const SERVERAPI = "http://10.0.0.105:8011";

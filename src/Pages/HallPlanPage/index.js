@@ -10,19 +10,22 @@ import Layout from "../../Components/Layout";
 import axios from "axios";
 import { SERVERAPI } from "../../Constants/Routes";
 
-function HallPlan() {
+function HallPlan(props) {
   const [hallplans, setHallplans] = useState([]);
 
   useEffect(() => {
     getHallPlans();
   }, []);
 
+  //get hallplans request
   const getHallPlans = () => {
     axios
-      .get(`${SERVERAPI}/api/v1/hallplans`)
+      .post(`${SERVERAPI}/api/v1/hallplans/db`, {
+        objID: 992500001,
+      })
       .then((result) => {
         setHallplans(result.data.data);
-        // console.log("hallplans data", result.data.data);
+        console.log("hallplans data", result.data.data);
       })
       .catch((err) => console.log(err.message));
   };
@@ -30,10 +33,10 @@ function HallPlan() {
   return (
     <Layout>
       <hr />
-      {hallplans.map((e) => (
+      {hallplans.map((e, index) => (
         <Link
-          key={e.hallPlansIdent}
-          to={`/${e.hallPlansIdent}`}
+          key={index}
+          to={`/${props.match.params.restaurantid}/${e.hallplansIdent}`}
           style={{ textDecoration: "none", color: "black" }}
         >
           <MDBCard
@@ -42,7 +45,7 @@ function HallPlan() {
             background="white"
             className="mb-3"
           >
-            <MDBCardHeader>{e.hallPlansIdent}</MDBCardHeader>
+            <MDBCardHeader>{e.hallplansIdent}</MDBCardHeader>
             <MDBCardBody className="text-secondary">
               <MDBCardTitle></MDBCardTitle>
             </MDBCardBody>

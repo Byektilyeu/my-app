@@ -17,25 +17,24 @@
   left: 0;
   right: 0;
 }
-
 .form {
-  margin-top: 5rem;
+  /* margin-top: 5rem; */
   font-family: "Roboto", sans-serif;
 }
-
-.form .input input {
+.formRes .input input {
   border-radius: 5px;
-  border-color: rgb(196, 230, 206);
+  /* border: 0; */
+  border-right: 1;
+  border-bottom: black;
+  /* border-color: rgb(196, 230, 206); */
   height: 2.5rem;
   width: 100%;
   margin: 0.2rem 0;
 }
-
 .buttons {
   /* display: flex;
   flex-direction: row; */
 }
-
 .button {
   margin: 0.2rem 0;
   color: #fff;
@@ -43,9 +42,12 @@
   border: none;
 }
 
-.spinner {
-  display: block;
-  margin-left: auto;
-  margin-right: auto;
-  margin-top: 50%;
+.resList {
+  margin-top: 5rem;
+  font-family: "Roboto", sans-serif;
+}
+.resButton {
+  border: none;
+  background: none;
+  text-align: left;
 }
