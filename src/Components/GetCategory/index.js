@@ -11,27 +11,23 @@ function GetCategory(props) {
   var el = useRef();
 
   useEffect(() => {
-    props.loadMenu();
-    if (props.selectedCategoryId == props.data.Ident)
-      el.current.scrollIntoView();
+    if (props.selectedCategoryId == props.ident) el.current.scrollIntoView();
   }, []);
 
   return (
     <div className="card-datas" ref={el}>
-      <p>{props.data.Name}</p>
-      <hr style={{ height: "2px" }} />
-
       <Row>
         {props.loadedMenu.map(
           (el) =>
-            el.mainParentIdent === props.data.Ident && (
+            el.mainParentIdent === props.ident && (
               <Col xs="6" className="col" key={el.Code}>
                 <GridItem
-                  Comment={el.Comment}
-                  AltName={el.AltName}
-                  Name={el.Name}
+                  item={el}
+                  Comment={el.comment}
+                  AltName={el.altName}
+                  Name={el.genname0409}
                   Price={el.priceOrderMenu}
-                  gendescription0450={el.gendescription0450}
+                  // gendescription0450={el.gendescription0450}
                   genname0450={el.genname0450}
                 />
               </Col>
@@ -48,10 +44,4 @@ const mapStateToProps = (state) => {
   };
 };
 
-const mapDispatchToProps = (dispatch) => {
-  return {
-    loadMenu: () => dispatch(actionsMenu.loadMenu()),
-  };
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(GetCategory);
+export default connect(mapStateToProps)(GetCategory);

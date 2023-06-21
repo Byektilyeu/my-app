@@ -26,6 +26,7 @@ function ResListPage(props) {
 
   useEffect(() => {
     getRestaurants();
+    // setLoading(false);
   }, [loading]);
 
   // get restaurants
@@ -40,20 +41,21 @@ function ResListPage(props) {
   };
 
   //create restaurant req
-  const createRestaurant = async () => {
+  const createRestaurant = () => {
     setLoading(false);
-    const configCreateRestaurant = {
-      method: "post",
-      url: `${SERVERAPI}/api/v1/restaurants/createrestaurant`,
-      data: {
+    axios
+      .post(`${SERVERAPI}/api/v1/restaurants/createrestaurant`, {
         name: restaurant.name,
         ID: restaurant.ID,
         objID: restaurant.objID,
-      },
-    };
-    setLoading(true);
-    let restaurantresponse = await axios(configCreateRestaurant);
-    console.log("createRestaurant ====> ", restaurantresponse.data.data);
+      })
+      .then((result) => {
+        if (result.data.data !== null) {
+          console.log("createRestaurant ====> ", result.data.data);
+          setLoading(true);
+        }
+      })
+      .catch((err) => console.log(err.message));
   };
 
   return (

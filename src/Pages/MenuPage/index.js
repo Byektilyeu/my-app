@@ -13,9 +13,11 @@ import { Link } from "react-router-dom";
 import { Row, Col } from "react-bootstrap";
 import GridItem from "../../Components/GridItem/index";
 import axios from "axios";
+import GetCategory from "../../Components/GetCategory";
 
 function MenuPage(props) {
-  // var categID = props.location.hash.replace("#", "");
+  var categID = props.location.hash.replace("#", "");
+  console.log("props location: ", props.location.hash);
 
   useEffect(() => {
     if (props.loadedGuid == null) {
@@ -108,7 +110,11 @@ function MenuPage(props) {
               <div key={i} className="menu-body" id={category.Ident}>
                 <p>{category.Name}</p>
                 <hr style={{ height: "2px" }} />
-                <Row>
+                <GetCategory
+                  selectedCategoryId={categID}
+                  ident={category.Ident}
+                />
+                {/* <Row>
                   {props.loadedMenu.map(
                     (el, index) =>
                       el.mainParentIdent === category.Ident && (
@@ -125,7 +131,7 @@ function MenuPage(props) {
                         </Col>
                       )
                   )}
-                </Row>
+                </Row> */}
               </div>
             ))}
           </div>

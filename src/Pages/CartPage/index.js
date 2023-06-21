@@ -1,9 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
 import axios from "axios";
 
 import Layout from "../../Components/Layout";
 import { SERVERAPI } from "../../Constants/Routes";
+import { MDBListGroup, MDBListGroupItem, MDBSpinner } from "mdb-react-ui-kit";
 import {
   IncreaseQuantity,
   DecreaseQuantity,
@@ -16,11 +17,16 @@ import { setOrderStatusAction } from "../../redux/actions/guidActions";
 
 function CartPage(props) {
   const [disable, setDisable] = useState(true);
+  const [loading, setLoading] = useState(false);
   // const [orders, setOrders] = useState([{}]);
-
-  // console.log("LoadedSettingsCartPage", props.loadedSettings);
   let ListCart = [];
   let TotalCart = 0;
+
+  useEffect(() => {
+    setLoading(true);
+  }, [loading]);
+
+  // console.log("LoadedSettingsCartPage", props.loadedSettings);
 
   // list cart ruu cart-iin zahialguudiig push hiij hiih
   Object.keys(props.loadedCartOrders).forEach(function (item) {
@@ -28,13 +34,7 @@ function CartPage(props) {
       (props.loadedCartOrders[item].quantity *
         props.loadedCartOrders[item].price) /
       100;
-    ListCart.push(props.loadedCartOrders[item]);
   });
-
-  //Total Price
-  function TotalPrice(price, quantity) {
-    return Number((price * quantity) / 100).toLocaleString("en-US");
-  }
 
   // Get monpay token
   const monpayGetTokenRequest = async () => {
@@ -157,6 +157,15 @@ function CartPage(props) {
     console.log("updateOrderMongoDB ====> ", updateOrderMongoDB.data.data);
   };
 
+  const DecreaseQuantityHandle = (key) => {
+    props.DecreaseQuantity(key);
+    setLoading(false);
+  };
+  const IncreaseQuantityHandle = (key) => {
+    props.IncreaseQuantity(key);
+    setLoading(false);
+  };
+
   // createOrderMongoDB
   const createOrderMongoDB = async (
     orderVisit,
@@ -200,58 +209,69 @@ function CartPage(props) {
         />
       </div>
 
-      <div className="cards">
-        {ListCart.map((item, key) => {
-          return (
-            <div key={key} className="list-card">
-              <div className="list-card-name">
-                <p>{item.name}</p>
-              </div>
-              <div className="list-card-img">
-                <img src={item.image} />
-              </div>
-              <div className="list-card-price">
-                <div className="card-price">
-                  ={TotalPrice(item.price, item.quantity)}₮
+      {loading ? (
+        <div>
+          <div className="cards">
+            {props.loadedCartOrders.map((item, key) => {
+              return (
+                <div key={key} className="list-card">
+                  <div className="list-card-name">
+                    <p>{item.name}</p>
+                  </div>
+                  <div className="list-card-img">
+                    <img src={item.image} />
+                  </div>
+                  <div className="list-card-price">
+                    <div className="card-price">
+                      =
+                      {Number(
+                        (item.price * item.quantity) / 100
+                      ).toLocaleString("en-US")}
+                    </div>
+                    <div className="list-card-quantity">
+                      <span
+                        className="list-card-btn"
+                        onClick={() => DecreaseQuantityHandle(key)}
+                      >
+                        -
+                      </span>
+                      <span className="list-card-quantity">
+                        {item.quantity}
+                      </span>
+                      <span
+                        className="list-card-btn"
+                        onClick={() => IncreaseQuantityHandle(key)}
+                      >
+                        +
+                      </span>
+                    </div>
+                  </div>
                 </div>
-                <div className="list-card-quantity">
-                  <span
-                    className="list-card-btn"
-                    onClick={() => props.DecreaseQuantity(key)}
-                  >
-                    -
-                  </span>
-                  <span className="list-card-quantity">{item.quantity}</span>
-                  <span
-                    className="list-card-btn"
-                    onClick={() => props.IncreaseQuantity(key)}
-                  >
-                    +
-                  </span>
-                </div>
-              </div>
+              );
+            })}
+          </div>
+          <div className="buttons">
+            <div className="total-price">
+              Нийт дүн: {Number(TotalCart).toLocaleString("en-US")} ₮
             </div>
-          );
-        })}
-      </div>
-      <div className="buttons">
-        <div className="total-price">
-          Нийт дүн: {Number(TotalCart).toLocaleString("en-US")} ₮
-        </div>
-        <button onClick={saveOrder} className="button">
-          <p>Захиалга зөв байна</p>
-        </button>
-        <button
-          // onClick={monpayGetTokenRequest}
-          disabled={disable}
-          className="button"
-        >
-          <p>Төлөх</p>
-        </button>
-        {/* <div onClick={getSystemInfo} className="grid-text">
+            <button onClick={saveOrder} className="button">
+              <p>Захиалга зөв байна</p>
+            </button>
+            <button
+              // onClick={monpayGetTokenRequest}
+              disabled={disable}
+              className="button"
+            >
+              <p>Төлөх</p>
+            </button>
+            {/* <div onClick={getSystemInfo} className="grid-text">
           <p>getSystemInfo</p>
         </div> */}
-      </div>
+          </div>{" "}
+        </div>
+      ) : (
+        <MDBSpinner className="spinner" color="success" />
+      )}
     </Layout>
   );
 }
