@@ -94,6 +94,7 @@ function SettingsPage(props) {
   // Tuhain restaurantiin hallplan, table, price ,menu-uudiig r-keeper ruu request ywuulj, mongodb ruu bichih commandiig ogch bna
   const getMenu = () => {
     requestGetHallPlans();
+    requestGetTables();
     requestGetMenuItems();
     requestGetPrice();
   };
@@ -103,7 +104,7 @@ function SettingsPage(props) {
     axios
       .post("http://10.0.0.104:8011/api/v1/hallplans", {
         objID: parseInt(objectID),
-        IP: "10.0.0.104",
+        IP: "10.0.0.111",
         PORT: 8086,
         username: "http_user1",
         password: "9",
@@ -112,25 +113,22 @@ function SettingsPage(props) {
         console.log("result hallplans", result.data);
       })
       .catch((err) => console.log(err.message));
+  };
 
-    // const configGetHallPlans = {
-    //   method: "post",
-    //   url: "http://10.0.0.103:8011/api/v1/hallplans",
-    //   data: {
-    //     objID: parseInt(objectID),
-    //     IP: "10.0.0.111",
-    //     PORT: 8086,
-    //     username: "http_user1",
-    //     password: "9",
-    //     // IP: settings.IP,
-    //     // PORT: settings.PORT,
-    //     // username: settings.username,
-    //     // password: settings.password,
-    //   },
-    // };
-    // console.log(" settings IP: ", settings.IP);
-    // let hallPlans = axios(configGetHallPlans);
-    // console.log("hallPlans ====> ", hallPlans.data.data);
+  // requestGetHallPlans
+  const requestGetTables = () => {
+    axios
+      .post("http://10.0.0.104:8011/api/v1/tables", {
+        objID: parseInt(objectID),
+        IP: "10.0.0.111",
+        PORT: 8086,
+        username: "http_user1",
+        password: "9",
+      })
+      .then((result) => {
+        console.log("result tables", result.data);
+      })
+      .catch((err) => console.log(err.message));
   };
 
   // requestGetMenuItems
@@ -138,7 +136,7 @@ function SettingsPage(props) {
     axios
       .post("http://10.0.0.104:8011/api/v1/menuitems", {
         objID: parseInt(objectID),
-        IP: "10.0.0.104",
+        IP: "10.0.0.111",
         PORT: 8086,
         username: "http_user1",
         password: "9",
@@ -147,26 +145,6 @@ function SettingsPage(props) {
         console.log("result menuitems", result.data);
       })
       .catch((err) => console.log(err.message));
-
-    // const configGetMenuItems = {
-    //   method: "post",
-    //   url: "http://10.0.0.103:8011/api/v1/menuitems",
-    //   data: {
-    //     objID: parseInt(objectID),
-    //     IP: "10.0.0.111",
-    //     PORT: 8086,
-    //     username: "http_user1",
-    //     password: "9",
-    //     // IP: settings.IP,
-    //     // PORT: settings.PORT,
-    //     // username: settings.username,
-    //     // password: settings.password,
-    //   },
-    // };
-
-    // let menuItems = axios(configGetMenuItems);
-    // console.log(" settings password: ", settings.password);
-    // console.log("menuItems ====> ", menuItems.data.data);
   };
 
   // requestGetOrderMenu
@@ -174,7 +152,7 @@ function SettingsPage(props) {
     axios
       .post("http://10.0.0.104:8011/api/v1/price", {
         objID: parseInt(objectID),
-        IP: "10.0.0.104",
+        IP: "10.0.0.111",
         PORT: 8086,
         username: "http_user1",
         password: "9",

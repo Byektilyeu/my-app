@@ -22,7 +22,7 @@ function TablePage(props) {
   const getTables = () => {
     // console.log(props.match.params.hallplansid);
     axios
-      .post(`${SERVERAPI}/api/v1/tables`, {
+      .post(`${SERVERAPI}/api/v1/tables/db`, {
         objID: 992500001,
         hallPlansIdent: props.match.params.hallplansid,
       })
