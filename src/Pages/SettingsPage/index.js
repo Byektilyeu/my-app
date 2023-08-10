@@ -15,7 +15,7 @@ function SettingsPage(props) {
   const [loading, setLoading] = useState(false);
   var obj = "";
 
-  // input-iin utgiig settings state ruu  save hiij  bna
+  // input-settings-iin utgiig settings state ruu  save hiij  bna
   const checkIP = (text) => {
     setSettings({ ...settings, IP: text.target.value });
   };
@@ -39,6 +39,15 @@ function SettingsPage(props) {
   };
   const checkStationCode = (text) => {
     setSettings({ ...settings, stationCode: text.target.value });
+  };
+  const checkOrderType = (text) => {
+    setSettings({ ...settings, orderType: text.target.value });
+  };
+  const checkCashierCode = (text) => {
+    setSettings({ ...settings, cashierCode: text.target.value });
+  };
+  const checkPassToken = (text) => {
+    setSettings({ ...settings, passToken: text.target.value });
   };
 
   useEffect(() => {
@@ -78,6 +87,9 @@ function SettingsPage(props) {
         waiterID: settings.waiterID,
         stationCode: settings.stationCode,
         objID: objectID,
+        orderType: settings.orderType,
+        cashierCode: settings.cashierCode,
+        passToken: settings.passToken,
       },
     };
     let saveSettings = await axios(configSaveSettings);
@@ -102,9 +114,9 @@ function SettingsPage(props) {
   // requestGetHallPlans
   const requestGetHallPlans = () => {
     axios
-      .post("http://10.0.0.104:8011/api/v1/hallplans", {
+      .post("http://10.0.0.105:8011/api/v1/hallplans", {
         objID: parseInt(objectID),
-        IP: "10.0.0.111",
+        IP: "10.0.0.105",
         PORT: 8086,
         username: "http_user1",
         password: "9",
@@ -118,9 +130,9 @@ function SettingsPage(props) {
   // requestGetHallPlans
   const requestGetTables = () => {
     axios
-      .post("http://10.0.0.104:8011/api/v1/tables", {
+      .post("http://10.0.0.105:8011/api/v1/tables", {
         objID: parseInt(objectID),
-        IP: "10.0.0.111",
+        IP: "10.0.0.105",
         PORT: 8086,
         username: "http_user1",
         password: "9",
@@ -134,9 +146,9 @@ function SettingsPage(props) {
   // requestGetMenuItems
   const requestGetMenuItems = () => {
     axios
-      .post("http://10.0.0.104:8011/api/v1/menuitems", {
+      .post("http://10.0.0.105:8011/api/v1/menuitems", {
         objID: parseInt(objectID),
-        IP: "10.0.0.111",
+        IP: "10.0.0.105",
         PORT: 8086,
         username: "http_user1",
         password: "9",
@@ -150,9 +162,9 @@ function SettingsPage(props) {
   // requestGetOrderMenu
   const requestGetPrice = () => {
     axios
-      .post("http://10.0.0.104:8011/api/v1/price", {
+      .post("http://10.0.0.105:8011/api/v1/price", {
         objID: parseInt(objectID),
-        IP: "10.0.0.111",
+        IP: "10.0.0.105",
         PORT: 8086,
         username: "http_user1",
         password: "9",
@@ -164,7 +176,7 @@ function SettingsPage(props) {
 
     // const configGetPrice = {
     //   method: "post",
-    //   url: "http://10.0.0.103:8011/api/v1/price",
+    //   url: "http://10.0.0.105:8011/api/v1/price",
     //   data: {
     //     objID: parseInt(objectID),
     //     IP: "10.0.0.111",
@@ -193,10 +205,11 @@ function SettingsPage(props) {
         </header>
 
         {loading ? (
-          <div className="form">
-            <div className="input">
-              <label className="labels">IP:</label>
+          <div className="form-settings">
+            <div className="input-settings ">
+              <label className="labels-settings">IP:</label>
               <input
+                className="border"
                 type="text"
                 name="IP"
                 defaultValue={""}
@@ -205,9 +218,10 @@ function SettingsPage(props) {
                 onChange={checkIP}
               />
             </div>
-            <div className="input">
-              <label className="labels">Port:</label>
+            <div className="input-settings">
+              <label className="labels-settings">Port:</label>
               <input
+                className="border"
                 type="text"
                 name="PORT"
                 defaultValue={""}
@@ -216,9 +230,10 @@ function SettingsPage(props) {
                 onChange={checkPort}
               />
             </div>
-            <div className="input">
-              <label className="labels">Username:</label>
+            <div className="input-settings">
+              <label className="labels-settings">Username:</label>
               <input
+                className="border"
                 type="text"
                 name="Username"
                 defaultValue={""}
@@ -227,9 +242,10 @@ function SettingsPage(props) {
                 onChange={checkUsername}
               />
             </div>
-            <div className="input">
-              <label className="labels">Password:</label>
+            <div className="input-settings">
+              <label className="labels-settings">Password:</label>
               <input
+                className="border"
                 type="text"
                 name="Password"
                 defaultValue={""}
@@ -238,9 +254,10 @@ function SettingsPage(props) {
                 onChange={checkPassword}
               />
             </div>
-            <div className="input">
-              <label className="labels">Station id:</label>
+            <div className="input-settings">
+              <label className="labels-settings">Station id:</label>
               <input
+                className="border"
                 type="text"
                 name="StationID"
                 defaultValue={""}
@@ -249,9 +266,10 @@ function SettingsPage(props) {
                 onChange={checkStationID}
               />
             </div>
-            <div className="input">
-              <label className="labels">Payment id:</label>
+            <div className="input-settings">
+              <label className="labels-settings">Payment id:</label>
               <input
+                className="border"
                 type="text"
                 name="PaymentID"
                 defaultValue={""}
@@ -260,9 +278,10 @@ function SettingsPage(props) {
                 onChange={checkPaymentID}
               />
             </div>
-            <div className="input">
-              <label className="labels">Waiter id:</label>
+            <div className="input-settings">
+              <label className="labels-settings">Waiter id:</label>
               <input
+                className="border"
                 type="text"
                 name="WaiterID"
                 defaultValue={""}
@@ -271,9 +290,22 @@ function SettingsPage(props) {
                 onChange={checkWaiterID}
               />
             </div>
-            <div className="input">
-              <label className="labels">Station code:</label>
+            <div className="input-settings">
+              <label className="labels-settings">Order type:</label>
               <input
+                className="border"
+                type="text"
+                name="OrderType"
+                defaultValue={""}
+                value={settings.orderType}
+                placeholder="OrderType"
+                onChange={checkOrderType}
+              />
+            </div>
+            <div className="input-settings">
+              <label className="labels-settings">Station code:</label>
+              <input
+                className="border"
                 type="text"
                 name="StationCode"
                 defaultValue={""}
@@ -282,9 +314,40 @@ function SettingsPage(props) {
                 onChange={checkStationCode}
               />
             </div>
-            <div className="input">
-              <label className="labels">Object id:</label>
-              <input name="ObjID" value={parseInt(objectID)} />
+
+            <div className="input-settings">
+              <label className="labels-settings">Cashier code:</label>
+              <input
+                className="border"
+                type="text"
+                name="CashierCode"
+                defaultValue={""}
+                value={settings.cashierCode}
+                placeholder="cashierCode"
+                onChange={checkCashierCode}
+              />
+            </div>
+
+            <div className="input-settings">
+              <label className="labels-settings">Pass token:</label>
+              <input
+                className="border"
+                type="text"
+                name="PassToken"
+                defaultValue={""}
+                value={settings.passToken}
+                placeholder="passToken"
+                onChange={checkPassToken}
+              />
+            </div>
+
+            <div className="input-settings">
+              <label className="labels-settings">Object id:</label>
+              <input
+                className="border"
+                name="ObjID"
+                value={parseInt(objectID)}
+              />
             </div>
             <div className="buttons">
               <div>

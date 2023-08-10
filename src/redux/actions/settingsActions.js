@@ -8,8 +8,8 @@ export const loadSettings = (objID) => {
     axios
       .post(`${SERVERAPI}/api/v1/settings/getsettings`, { objID: objID })
       .then((response) => {
-        const loadedSettings = response.data.data;
-        console.log("settngs action ", objID);
+        const loadedSettings = response.data.data[0];
+        console.log("settngs action ", response.data.data[0]);
         dispatch(loadSettingsSuccess(loadedSettings));
       })
       .catch((err) => dispatch(loadSettingsError(err)));

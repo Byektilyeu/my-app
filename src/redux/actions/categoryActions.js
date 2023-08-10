@@ -1,7 +1,7 @@
 import axios from "axios";
 import { SERVERAPI } from "../../Constants/Routes/index";
 
-export const loadCategories = () => {
+export const loadCategories = (objID) => {
   return function (dispatch) {
     //Zahialgiig tataj ehellee gedgiig medegdene
     // Eniig huleej avaad spinner ajillaj ehelne
@@ -9,7 +9,7 @@ export const loadCategories = () => {
 
     axios
       .post(`${SERVERAPI}/api/v1/categories`, {
-        objID: 992500001,
+        objID: parseInt(objID),
       })
       .then((response) => {
         const loadedCategories = response.data.data;

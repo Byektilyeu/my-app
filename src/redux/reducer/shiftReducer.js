@@ -1,25 +1,25 @@
 const initialState = {
-  loadedSettings: null,
+  loadedShift: null,
   loading: false,
   error: null,
 };
 
 const reducer = (state = initialState, action) => {
   switch (action.type) {
-    case "LOAD_SETTINGS_START":
+    case "LOAD_SHIFT_START":
       return {
         ...state,
         loading: true,
       };
 
-    case "LOAD_SETTINGS_SUCCESS":
+    case "LOAD_SHIFT_SUCCESS":
       return {
         ...state,
         loading: true,
-        loadedSettings: action.loadedSettings,
+        loadedShift: action.loadedShift,
       };
 
-    case "LOAD_SETTINGS_ERROR":
+    case "LOAD_SHIFT_ERROR":
       return {
         ...state,
         loading: false,

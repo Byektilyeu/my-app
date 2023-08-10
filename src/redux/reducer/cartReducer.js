@@ -23,8 +23,8 @@ function reducer(state = initProduct, action) {
         let cart = {
           id: action.payload.menuIdent,
           quantity: 1,
-          name: action.payload.Name,
-          image: action.payload.Comment,
+          name: action.payload.name,
+          image: action.payload.comment,
           price: action.payload.priceOrderMenu,
         };
         state.Carts.push(cart);
@@ -42,8 +42,8 @@ function reducer(state = initProduct, action) {
           let _cart = {
             id: action.payload.menuIdent,
             quantity: 1,
-            name: action.payload.Name,
-            image: action.payload.Comment,
+            name: action.payload.name,
+            image: action.payload.comment,
             price: action.payload.priceOrderMenu,
           };
           state.Carts.push(_cart);

@@ -18,14 +18,15 @@
   right: 0;
 }
 
-.form {
+.form-settings {
   margin-top: 5rem;
   font-family: "Roboto", sans-serif;
 }
 
-.form .input input {
+.form-settings .input-settings input {
+  border: 1;
   border-radius: 5px;
-  border-color: rgb(196, 230, 206);
+  border-color: rgb(19, 20, 20);
   height: 2.5rem;
   width: 100%;
   margin: 0.2rem 0;

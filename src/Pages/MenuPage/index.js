@@ -21,7 +21,7 @@ function MenuPage(props) {
 
   useEffect(() => {
     if (props.loadedGuid == null) {
-      // createOrderRequest();
+      createOrderRequest();
     }
     // props.loadCategories();
     // props.loadMenu();
@@ -29,23 +29,24 @@ function MenuPage(props) {
     console.log("loaded menu", props.loadedMenu);
   }, [props.alertState]);
 
-  // ***************createOrderRequest******************
+  // ***************createOrderRequest r-keeper******************
 
   const createOrderRequest = async () => {
-    // const tableID = props.match.params.tableid;
-    const tableID = "1000478";
-    const stationID = "15002";
-    const waiterID = "1000007";
-    const orderType = "2";
+    const settings = props.loadedSettings;
+    const tableID = props.match.params.tableid;
 
     const configCreateOrderRequest = {
       method: "post",
       url: `${SERVERAPI}/api/v1/rkeeper/createorder`,
       data: {
         tableID: tableID,
-        stationID: stationID,
-        waiterID: waiterID,
-        orderType: orderType,
+        stationID: settings.stationID,
+        waiterID: settings.waiterID,
+        orderType: settings.orderType,
+        username: settings.username,
+        password: settings.password,
+        hostname: settings.IP,
+        port: settings.port,
       },
     };
 
@@ -145,6 +146,7 @@ const mapStateToProps = (state) => {
   console.log(" state all ", state);
   return {
     loadedCategories: state.categoryReducer.loadedCategories,
+    loadedSettings: state.settingsReducer.loadedSettings,
     loading: state.categoryReducer.loading,
     loadedMenu: state.menuReducer.loadedMenu,
     itemsCart: state.cartReducer.Carts,

@@ -10,6 +10,7 @@ import { Link } from "react-router-dom";
 import * as actionsCategory from "../../redux/actions/categoryActions";
 import * as actionsMenu from "../../redux/actions/menuActions";
 import * as actionsSettings from "../../redux/actions/settingsActions";
+import * as actionShift from "../../redux/actions/shiftActions";
 import { connect } from "react-redux";
 
 function HomePage(props) {
@@ -17,9 +18,10 @@ function HomePage(props) {
 
   // Buh category, menu, settings-uudiig redux-aas load hiij bna
   useEffect(() => {
-    props.loadCategories();
+    props.loadCategories(objID);
     props.loadMenu(objID);
     props.loadSettings(objID);
+    props.loadShift(objID);
   }, []);
 
   return (
@@ -57,14 +59,16 @@ const mapStateToProps = (state) => {
     loadedCategories: state.categoryReducer.loadedCategories,
     loading: state.categoryReducer.loading,
     loadedMenu: state.menuReducer.loadedMenu,
+    loadedShift: state.shiftReducer.loadedShift,
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    loadCategories: () => dispatch(actionsCategory.loadCategories()),
+    loadCategories: (data2) => dispatch(actionsCategory.loadCategories(data2)),
     loadMenu: (data1) => dispatch(actionsMenu.loadMenu(data1)),
     loadSettings: (data) => dispatch(actionsSettings.loadSettings(data)),
+    loadShift: (data3) => dispatch(actionShift.loadShift(data3)),
   };
 };
 
