@@ -14,7 +14,9 @@ import OrderResultPage from "./Pages/OrderResultPage/index";
 import SettingsPage from "./Pages/SettingsPage";
 import ResListPage from "./Pages/CreateRestaurantPage";
 import RestaurantsPage from "./Pages/RestaurantsPage";
-import VoidPassPage from "./Pages/VoidPassPage";
+import VoidPage from "./Pages/VoidPage";
+import VoidOrderPage from "./Pages/VoidOrderPage";
+import AdminPage from "./Pages/AdminPage";
 // import GetCategory from "./Components/GetCategory/index";
 
 const App = () => {
@@ -22,7 +24,9 @@ const App = () => {
     <BrowserRouter>
       <div>
         <Switch>
-          <Route exact path={ROUTES.VOIDPASS} component={VoidPassPage} />
+          <Route exact path={ROUTES.ADMINPAGE} component={AdminPage} />
+          <Route exact path={ROUTES.VOID} component={VoidPage} />
+          <Route exact path={ROUTES.VOIDORDER} component={VoidOrderPage} />
           <Route exact path={ROUTES.RESLIST} component={ResListPage} />
           <Route exact path={ROUTES.SETTINGS} component={SettingsPage} />
           <Route exact path={ROUTES.RESTAURANT} component={RestaurantsPage} />

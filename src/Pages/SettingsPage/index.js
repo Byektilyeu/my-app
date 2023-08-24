@@ -114,9 +114,9 @@ function SettingsPage(props) {
   // requestGetHallPlans
   const requestGetHallPlans = () => {
     axios
-      .post("http://10.0.0.105:8011/api/v1/hallplans", {
+      .post("http://10.0.0.104:8011/api/v1/hallplans", {
         objID: parseInt(objectID),
-        IP: "10.0.0.105",
+        IP: "10.0.0.104",
         PORT: 8086,
         username: "http_user1",
         password: "9",
@@ -130,9 +130,9 @@ function SettingsPage(props) {
   // requestGetHallPlans
   const requestGetTables = () => {
     axios
-      .post("http://10.0.0.105:8011/api/v1/tables", {
+      .post("http://10.0.0.104:8011/api/v1/tables", {
         objID: parseInt(objectID),
-        IP: "10.0.0.105",
+        IP: "10.0.0.104",
         PORT: 8086,
         username: "http_user1",
         password: "9",
@@ -146,9 +146,9 @@ function SettingsPage(props) {
   // requestGetMenuItems
   const requestGetMenuItems = () => {
     axios
-      .post("http://10.0.0.105:8011/api/v1/menuitems", {
+      .post("http://10.0.0.104:8011/api/v1/menuitems", {
         objID: parseInt(objectID),
-        IP: "10.0.0.105",
+        IP: "10.0.0.104",
         PORT: 8086,
         username: "http_user1",
         password: "9",
@@ -162,9 +162,9 @@ function SettingsPage(props) {
   // requestGetOrderMenu
   const requestGetPrice = () => {
     axios
-      .post("http://10.0.0.105:8011/api/v1/price", {
+      .post("http://10.0.0.104:8011/api/v1/price", {
         objID: parseInt(objectID),
-        IP: "10.0.0.105",
+        IP: "10.0.0.104",
         PORT: 8086,
         username: "http_user1",
         password: "9",
@@ -176,7 +176,7 @@ function SettingsPage(props) {
 
     // const configGetPrice = {
     //   method: "post",
-    //   url: "http://10.0.0.105:8011/api/v1/price",
+    //   url: "http://10.0.0.104:8011/api/v1/price",
     //   data: {
     //     objID: parseInt(objectID),
     //     IP: "10.0.0.111",

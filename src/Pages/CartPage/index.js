@@ -259,14 +259,20 @@ function CartPage(props) {
       },
     };
     let payOrder = await axios(configPayOrder);
+
     const myObj = JSON.parse(payOrder.data.data);
+    insertPayOrderDataDB(myObj);
+
+    // if (myObj.status === "ok") {
+
+    // }
+  };
+
+  const insertPayOrderDataDB = async (myObj) => {
     const orderAmount = myObj.RK7QueryResult.PrintCheck._attributes.amount;
     const checkNum = myObj.RK7QueryResult.PrintCheck._attributes.CheckNum;
     const closedDate = myObj.RK7QueryResult.PrintCheck._attributes.printTime;
     const dDTD = myObj.RK7QueryResult.PrintCheck._attributes.GlobalFiscalID;
-
-    // if (myObj.status === "ok") {
-
     const configInsertPayOrder = {
       method: "post",
       url: `${SERVERAPI}/api/v1/orders/insertpayorder`,
@@ -279,7 +285,6 @@ function CartPage(props) {
       },
     };
     let insertPayOrderResponse = await axios(configInsertPayOrder);
-    // }
   };
 
   // ******************************************************* MONGO DB ***************************************************/
