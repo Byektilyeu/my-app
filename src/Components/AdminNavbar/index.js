@@ -1,16 +1,18 @@
 import { useState } from "react";
 import { NavLink } from "react-router-dom";
-// import { ReactComponent as Hamburger } from "../../assets/icons/hamburger.svg";
-import rkeeper from "../../Assets/rkeeper.webp";
+import { connect } from "react-redux";
 import ham1 from "../../Assets/Hamburger_icon.svg.png";
-// import { ReactComponent as Brand } from "../../assets/icons/logo.svg";
 import "./index.css";
+import { logout } from "../../redux/actions/userActions";
 
-const AdminNavbar = () => {
+const AdminNavbar = (props) => {
   const [showNavbar, setShowNavbar] = useState(false);
 
   const handleShowNavbar = () => {
     setShowNavbar(!showNavbar);
+  };
+  const onLogout = () => {
+    props.logout();
   };
 
   return (
@@ -23,19 +25,26 @@ const AdminNavbar = () => {
         <div className={`nav-elements  ${showNavbar && "active"}`}>
           <ul>
             <li>
-              <NavLink to="/">Нүүр</NavLink>
+              <NavLink to={`/admin/${props.user.objID}`}>Нүүр</NavLink>
             </li>
+            {props.user.role === "manager" && (
+              <li>
+                <NavLink to={`/admin/${props.user.objID}/void`}>
+                  Буцаалт
+                </NavLink>
+              </li>
+            )}
+            {props.user.role === "admin" && (
+              <li>
+                <NavLink to="/admin/createrestaurant">
+                  create-restaurant
+                </NavLink>
+              </li>
+            )}
             <li>
-              <NavLink to="/admin/void">Буцаалт</NavLink>
-            </li>
-            <li>
-              <NavLink to="/nav1">Nav1</NavLink>
-            </li>
-            <li>
-              <NavLink to="/nav2">Nav3</NavLink>
-            </li>
-            <li>
-              <NavLink to="/nav3">Хэрэглэгч</NavLink>
+              <NavLink to="/admin" onClick={onLogout}>
+                Гарах
+              </NavLink>
             </li>
           </ul>
         </div>
@@ -44,4 +53,16 @@ const AdminNavbar = () => {
   );
 };
 
-export default AdminNavbar;
+const mapStateToProps = (state) => {
+  return {
+    user: state.userReducer.user,
+  };
+};
+
+function mapDispatchToProps(dispatch) {
+  return {
+    logout: () => dispatch(logout()),
+  };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(AdminNavbar);

@@ -13,10 +13,12 @@ import Paper from "@mui/material/Paper";
 import Button from "@mui/material/Button";
 import Layout from "../../Components/Layout";
 import { useHistory } from "react-router-dom";
+import toast, { Toaster } from "react-hot-toast";
 import "./style.css";
 
 function VoidOrderPage(props) {
   const [order, setOrder] = useState([]);
+  const [status, setStatus] = useState("");
   const [paymentName, setPaymentName] = useState("");
   const [orderID, setOrderID] = useState("");
   let history = useHistory();
@@ -26,41 +28,101 @@ function VoidOrderPage(props) {
     console.log("void page props datas", props);
   }, []);
 
-  //  get pass orders
+  //  get void order
   const getVoidOrder = () => {
     axios
       .post(`${SERVERAPI}/api/v1/orders/getvoidorder`, {
-        objID: 992500001,
-        shiftNum: 876,
+        objID: props.loadedShift.objID,
+        shiftNum: props.loadedShift.shiftNum,
         visit: props.match.params.ordervisit,
       })
       .then((result) => {
         console.log("get void order", result.data.data);
         setOrder(result.data.data);
+        setStatus(result.data.data[0].status);
         setPaymentName(result.data.data[0].transiactionInfo.paymentName);
-        setOrderID(result.data.data[0].transiactionInfo.order_id);
+        // setOrderID(result.data.data[0].transiactionInfo.order_id); // product
+        setOrderID(result.data.data[0].transiactionInfo.order_id.substring(21)); //test version
       })
       .catch((err) => console.log(err.message));
   };
 
   // void order pass
   const voidOrder = () => {
+    // voidOrderRkeeper();
     switch (paymentName) {
       case "pass":
         axios
           .post(`${SERVERAPI}/api/v1/pass/order_void_pass`, {
-            objID: 992500001,
-            ecommerce_token: "fb44cca836e94582a73371462ac2eeab",
+            objID: props.loadedShift.objID,
+            ecommerce_token: props.loadedSettings.passToken,
             order_id: orderID,
           })
           .then((result) => {
-            console.log(" void order result", result.data);
+            console.log(" void order result ==> ", result.data);
+            if (result.data.data.status_code == "ok") {
+              // toast.error(
+              //   "Pass error: Буцаалт амжилтгүй боллоо!!!, status code: ",
+              //   result.data.data.status_code
+              // );
+              voidOrderRkeeper();
+            } else {
+              toast.error(
+                "Pass error: Буцаалт амжилтгүй боллоо!!!, status code: ",
+                result.data.data.status_code
+              );
+            }
           })
           .catch((err) => console.log(err.message));
         break;
       default:
         break;
     }
+  };
+
+  const voidOrderRkeeper = () => {
+    axios
+      .post(`${SERVERAPI}/api/v1/rkeeper/deletereceipt`, {
+        receiptNum: order[0].payOrder.checkNum,
+        objID: props.loadedShift.objID,
+      })
+      .then((result) => {
+        const obj = JSON.parse(result.data.data);
+        const managerID = JSON.parse(result.data.managerID);
+        if (obj.RK7QueryResult._attributes.Status == "Ok") {
+          deleteReceiptSuccess(obj.RK7QueryResult._attributes, managerID);
+          toast.success(
+            "R-Keeper,  Буцаалт  амжилттай хийгдлээ. Дансаа шалгана уу?"
+          );
+
+          //  void info insert to mongo db database
+        } else {
+          toast.error(
+            "R-Keeper error: Буцаалт амжилтгүй боллоо!!!,  error text r-keeper: ",
+            obj.RK7QueryResult._attributes.ErrorText
+          );
+        }
+        console.log(
+          "void order rkeeper !!!!!!!!!!!!!!  ==>",
+          obj.RK7QueryResult._attributes.Status
+        );
+      })
+      .catch((err) => console.log(err.message));
+  };
+
+  const deleteReceiptSuccess = (objResult, managerID) => {
+    axios
+      .post(`${SERVERAPI}/api/v1/orders/deletereceiptsuccess`, {
+        visit: props.match.params.ordervisit,
+        status: 7,
+        cashierID: managerID,
+        deletedDate: objResult.DateTime,
+        deletedPerson: props.user.username,
+      })
+      .then((result) => {
+        console.log("deleteReceiptSuccess amjilttai");
+      })
+      .catch((err) => console.log(err.message));
   };
 
   return (
@@ -72,6 +134,7 @@ function VoidOrderPage(props) {
       >
         <AdminNavbar />
       </div>
+      <Toaster position="top-center" reverseOrder={false} />
 
       <Layout>
         <TableContainer component={Paper}>
@@ -112,7 +175,10 @@ function VoidOrderPage(props) {
                     </TableCell>
                     <TableCell align="right">{product.name}</TableCell>
                     <TableCell align="right">{product.quantity}</TableCell>
-                    <TableCell align="right">{product.price}</TableCell>
+                    <TableCell align="right">
+                      {product.price / 100} x {product.quantity} =
+                      {(product.price * product.quantity) / 100}
+                    </TableCell>
                   </TableRow>
                 ))}
               </TableBody>
@@ -120,9 +186,11 @@ function VoidOrderPage(props) {
           ))}
         </TableContainer>
         <div className="buttons">
-          <Button onClick={voidOrder} variant="outlined" color="error">
-            Устгах
-          </Button>
+          {status == 6 && (
+            <Button onClick={voidOrder} variant="outlined" color="error">
+              Устгах
+            </Button>
+          )}
           <Button
             onClick={() => history.goBack()}
             variant="outlined"
@@ -158,6 +226,8 @@ function VoidOrderPage(props) {
 const mapStateToProps = (state) => {
   return {
     loadedShift: state.shiftReducer.loadedShift,
+    loadedSettings: state.settingsReducer.loadedSettings,
+    user: state.userReducer.user,
   };
 };
 

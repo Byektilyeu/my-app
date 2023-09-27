@@ -4,7 +4,6 @@ import axios from "axios";
 import toast, { Toaster } from "react-hot-toast";
 import Layout from "../../Components/Layout";
 import { SERVERAPI } from "../../Constants/Routes";
-import { MDBSpinner } from "mdb-react-ui-kit";
 import {
   IncreaseQuantity,
   DecreaseQuantity,
@@ -13,7 +12,24 @@ import {
 import "./style.css";
 import CartNavbar from "../../Components/CartNavbar/index";
 import back from "../../Assets/back.png";
+import QPayLogo from "../../Assets/qpay-logo.png";
+import PassLogo from "../../Assets/pass-logo.png";
 import { setOrderStatusAction } from "../../redux/actions/guidActions";
+import {
+  MDBBtn,
+  MDBModal,
+  MDBModalDialog,
+  MDBModalContent,
+  MDBModalHeader,
+  MDBModalTitle,
+  MDBModalBody,
+  MDBModalFooter,
+  MDBCard,
+  MDBCardBody,
+  MDBCardText,
+  MDBCardImage,
+  MDBSpinner,
+} from "mdb-react-ui-kit";
 
 function CartPage(props) {
   const [disable, setDisable] = useState(true);
@@ -21,7 +37,10 @@ function CartPage(props) {
   const [orderPage, setOrderPage] = useState(false);
   const [orderGuid, setOrderGuid] = useState("");
   const [orderVisit, setOrderVisit] = useState("");
+  const [centredModal, setCentredModal] = useState(false);
   let TotalCart = 0;
+
+  const toggleShow = () => setCentredModal(!centredModal);
 
   useEffect(() => {
     setLoading(true);
@@ -41,11 +60,12 @@ function CartPage(props) {
 
   // create order request pass
   const createOrderPass = async () => {
+    const passToken = props.loadedSettings.passToken;
     const configCreateOrderPass = {
       method: "post",
       url: `${SERVERAPI}/api/v1/pass/createorderpass`,
       data: {
-        ecommerce_token: "fb44cca836e94582a73371462ac2eeab",
+        ecommerce_token: passToken,
         amount: TotalCart,
       },
     };
@@ -70,13 +90,14 @@ function CartPage(props) {
 
   // order inquiry request pass
   const orderInquiryPass = async (order_id) => {
+    const passToken = props.loadedSettings.passToken;
     var timer = 0;
     var interval = setInterval(async () => {
       const configOrderInquiryPass = {
         method: "post",
         url: `${SERVERAPI}/api/v1/pass/order_inquiry_pass`,
         data: {
-          ecommerce_token: "fb44cca836e94582a73371462ac2eeab",
+          ecommerce_token: passToken,
           order_id: order_id,
         },
       };
@@ -279,6 +300,7 @@ function CartPage(props) {
       data: {
         visit: orderVisit,
         dDTD: dDTD,
+        status: 6,
         orderAmount: orderAmount,
         checkNum: checkNum,
         closedDate: closedDate,
@@ -296,6 +318,7 @@ function CartPage(props) {
       url: `${SERVERAPI}/api/v1/orders/insertorderdetails`,
       data: {
         visit: orderVisit,
+        status: 2,
         orderVisit: orderVisit,
         orderGuid: guid,
         products: cartOrders,
@@ -330,6 +353,7 @@ function CartPage(props) {
         shiftNum: shiftNum,
         objID: objID,
         visit: orderVisit,
+        status: 2,
         orderVisit: orderVisit,
         orderNumber: orderNumber,
         orderGuid: guid,
@@ -413,7 +437,7 @@ function CartPage(props) {
             <button
               // onClick={monpayGetTokenRequest}
               // pass
-              onClick={createOrderPass}
+              onClick={toggleShow}
               disabled={disable}
               className="button"
             >
@@ -424,6 +448,74 @@ function CartPage(props) {
         </div> */}
           </div>
         )}
+
+        <MDBModal tabIndex="-1" show={centredModal} setShow={setCentredModal}>
+          <MDBModalDialog centered>
+            <MDBModalContent>
+              <MDBModalHeader>
+                <MDBModalTitle>Төлбөр төлөх</MDBModalTitle>
+              </MDBModalHeader>
+
+              <MDBModalBody>
+                <div
+                  style={{
+                    display: "flex",
+                    flexDirection: "row",
+                    gap: "20px",
+                  }}
+                >
+                  <MDBCard
+                    style={{
+                      display: "flex",
+                      width: "5rem",
+                      height: "5rem",
+                      justifyContent: "center",
+                      alignItems: "center",
+                    }}
+                    onClick={createOrderPass}
+                  >
+                    <MDBCardImage
+                      style={{
+                        width: "5rem",
+                        height: "2.5rem",
+                        padding: "0.4rem",
+                      }}
+                      src={PassLogo}
+                      alt="..."
+                    />
+                  </MDBCard>
+                  <MDBCard
+                    style={{
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                      width: "5rem",
+                      height: "5rem",
+                    }}
+                  >
+                    <MDBCardImage
+                      style={{
+                        width: "5rem",
+                        height: "2.5rem",
+                        padding: "0.4rem",
+                      }}
+                      src={QPayLogo}
+                      alt="..."
+                      position="center"
+                    />
+                  </MDBCard>
+
+                  {/* // createOrderPass call */}
+                </div>
+              </MDBModalBody>
+              <MDBModalFooter>
+                <MDBBtn color="success" onClick={toggleShow}>
+                  Хаах
+                </MDBBtn>
+              </MDBModalFooter>
+            </MDBModalContent>
+          </MDBModalDialog>
+        </MDBModal>
       </Layout>
     </div>
   );

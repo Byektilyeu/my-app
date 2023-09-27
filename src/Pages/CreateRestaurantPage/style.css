@@ -22,11 +22,15 @@
   /* margin-top: 5rem; */
   font-family: "Roboto", sans-serif;
 }
-.formRes .input input {
+.formRes {
+  margin-top: 5rem;
+}
+.formRes .input-form {
+  border: 1;
+}
+.formRes .input-form input {
   border-radius: 5px;
-  /* border: 0; */
-  border-right: 1;
-  border-bottom: black;
+  border: 1;
   /* border-color: rgb(196, 230, 206); */
   height: 2.5rem;
   width: 100%;
@@ -44,11 +48,11 @@
 }
 
 .resList {
-  margin-top: 5rem;
+  margin-top: 4rem;
   font-family: "Roboto", sans-serif;
 }
 .resButton {
-  border: none;
+  border: 1;
   background: none;
   text-align: left;
 }

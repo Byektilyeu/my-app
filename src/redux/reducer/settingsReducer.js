@@ -5,6 +5,7 @@ const initialState = {
 };
 
 const reducer = (state = initialState, action) => {
+  console.log("action settings : ", action.loadedSettings);
   switch (action.type) {
     case "LOAD_SETTINGS_START":
       return {
@@ -24,6 +25,13 @@ const reducer = (state = initialState, action) => {
         ...state,
         loading: false,
         error: action.error,
+      };
+
+    case "SETSETTINGS":
+      return {
+        ...state,
+        loading: true,
+        loadedSettings: action.loadedSettings,
       };
 
     default:

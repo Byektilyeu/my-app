@@ -1,13 +1,15 @@
 import React, { useEffect, useState } from "react";
 import Layout from "../../Components/Layout";
 import PageFooter from "../../Components/footer/index";
-import MyNavbar from "../../Components/Navbar";
+// import MyNavbar from "../../Components/Navbar";
+import AdminNavbar from "../../Components/AdminNavbar";
 import "./style.css";
 import { connect } from "react-redux";
 import axios from "axios";
 import { SERVERAPI } from "../../Constants/Routes";
 import { MDBSpinner } from "mdb-react-ui-kit";
 import ToastContainer, { toast } from "react-light-toast";
+import { setSettingsData } from "../../redux/actions/settingsActions";
 
 function SettingsPage(props) {
   const [settings, setSettings] = useState("");
@@ -49,6 +51,15 @@ function SettingsPage(props) {
   const checkPassToken = (text) => {
     setSettings({ ...settings, passToken: text.target.value });
   };
+  const checkManagerID = (text) => {
+    setSettings({ ...settings, managerID: text.target.value });
+  };
+  const checkManagerPassword = (text) => {
+    setSettings({ ...settings, managerPassword: text.target.value });
+  };
+  const checkDeleteReasonID = (text) => {
+    setSettings({ ...settings, deleteReasonID: text.target.value });
+  };
 
   useEffect(() => {
     getSettings();
@@ -62,8 +73,9 @@ function SettingsPage(props) {
       })
       .then((result) => {
         if (result.data.data.length !== 0) {
-          // console.log("hooson bna", result.data.data);
+          console.log("hooson bna", result.data.data[0]);
           setSettings(result.data.data[0]);
+          props.setSettingsData(result.data.data[0]);
         } else {
           console.log("hooson bna");
         }
@@ -90,12 +102,16 @@ function SettingsPage(props) {
         orderType: settings.orderType,
         cashierCode: settings.cashierCode,
         passToken: settings.passToken,
+        managerID: settings.managerID,
+        managerPassword: settings.managerPassword,
+        deleteReasonID: settings.deleteReasonID,
       },
     };
     let saveSettings = await axios(configSaveSettings);
-    console.log(saveSettings.data.success);
+    console.log("]]]]]]]", saveSettings.data.success);
 
     if (saveSettings.data.success) {
+      props.setSettingsData(settings);
       toast.success("Амжилттай хадгалагдлаа", {
         autoClose: true, // disable auto close | default: true
         closeDuration: 1500, // close duration in ms | default: 3000
@@ -114,12 +130,12 @@ function SettingsPage(props) {
   // requestGetHallPlans
   const requestGetHallPlans = () => {
     axios
-      .post("http://10.0.0.104:8011/api/v1/hallplans", {
+      .post(`${SERVERAPI}/api/v1/hallplans`, {
         objID: parseInt(objectID),
-        IP: "10.0.0.104",
-        PORT: 8086,
-        username: "http_user1",
-        password: "9",
+        IP: props.loadedSettings.IP,
+        PORT: props.loadedSettings.port,
+        username: props.loadedSettings.username,
+        password: props.loadedSettings.password,
       })
       .then((result) => {
         console.log("result hallplans", result.data);
@@ -130,12 +146,12 @@ function SettingsPage(props) {
   // requestGetHallPlans
   const requestGetTables = () => {
     axios
-      .post("http://10.0.0.104:8011/api/v1/tables", {
+      .post(`${SERVERAPI}/api/v1/tables`, {
         objID: parseInt(objectID),
-        IP: "10.0.0.104",
-        PORT: 8086,
-        username: "http_user1",
-        password: "9",
+        IP: props.loadedSettings.IP,
+        PORT: props.loadedSettings.port,
+        username: props.loadedSettings.username,
+        password: props.loadedSettings.password,
       })
       .then((result) => {
         console.log("result tables", result.data);
@@ -146,12 +162,12 @@ function SettingsPage(props) {
   // requestGetMenuItems
   const requestGetMenuItems = () => {
     axios
-      .post("http://10.0.0.104:8011/api/v1/menuitems", {
+      .post(`${SERVERAPI}/api/v1/menuitems`, {
         objID: parseInt(objectID),
-        IP: "10.0.0.104",
-        PORT: 8086,
-        username: "http_user1",
-        password: "9",
+        IP: props.loadedSettings.IP,
+        PORT: props.loadedSettings.port,
+        username: props.loadedSettings.username,
+        password: props.loadedSettings.password,
       })
       .then((result) => {
         console.log("result menuitems", result.data);
@@ -162,12 +178,12 @@ function SettingsPage(props) {
   // requestGetOrderMenu
   const requestGetPrice = () => {
     axios
-      .post("http://10.0.0.104:8011/api/v1/price", {
+      .post(`${SERVERAPI}/api/v1/price`, {
         objID: parseInt(objectID),
-        IP: "10.0.0.104",
-        PORT: 8086,
-        username: "http_user1",
-        password: "9",
+        IP: props.loadedSettings.IP,
+        PORT: props.loadedSettings.port,
+        username: props.loadedSettings.username,
+        password: props.loadedSettings.password,
       })
       .then((result) => {
         console.log("result price", result.data);
@@ -176,7 +192,7 @@ function SettingsPage(props) {
 
     // const configGetPrice = {
     //   method: "post",
-    //   url: "http://10.0.0.104:8011/api/v1/price",
+    //   url: "http://10.0.0.105:8011/api/v1/price",
     //   data: {
     //     objID: parseInt(objectID),
     //     IP: "10.0.0.111",
@@ -200,7 +216,7 @@ function SettingsPage(props) {
       <Layout>
         <header>
           <div id="nav">
-            <MyNavbar title="Тохиргоо" />
+            <AdminNavbar />
           </div>
         </header>
 
@@ -342,6 +358,45 @@ function SettingsPage(props) {
             </div>
 
             <div className="input-settings">
+              <label className="labels-settings">Manager ID:</label>
+              <input
+                className="border"
+                type="text"
+                name="ManagerID"
+                defaultValue={""}
+                value={settings.managerID}
+                placeholder="managerID"
+                onChange={checkManagerID}
+              />
+            </div>
+
+            <div className="input-settings">
+              <label className="labels-settings">Manager Password:</label>
+              <input
+                className="border"
+                type="text"
+                name="ManagerPassword"
+                defaultValue={""}
+                value={settings.managerPassword}
+                placeholder="managerPassword"
+                onChange={checkManagerPassword}
+              />
+            </div>
+
+            <div className="input-settings">
+              <label className="labels-settings">Delete Reason ID:</label>
+              <input
+                className="border"
+                type="text"
+                name="DeleteReasonID"
+                defaultValue={""}
+                value={settings.deleteReasonID}
+                placeholder="deleteReasonID"
+                onChange={checkDeleteReasonID}
+              />
+            </div>
+
+            <div className="input-settings">
               <label className="labels-settings">Object id:</label>
               <input
                 className="border"
@@ -384,6 +439,7 @@ const mapStateToProps = (state) => {
     // loadedCategories: state.categoryReducer.loadedCategories,
     // loading: state.categoryReducer.loading,
     // loadedMenu: state.menuReducer.loadedMenu,
+    loadedSettings: state.settingsReducer.loadedSettings,
   };
 };
 
@@ -391,7 +447,7 @@ const mapDispatchToProps = (dispatch) => {
   return {
     // loadCategories: () => dispatch(actionsCategory.loadCategories()),
     // loadMenu: () => dispatch(actionsMenu.loadMenu()),
-    // loadSettings: () => dispatch(actionsSettings.loadSettings()),
+    setSettingsData: (settings) => dispatch(setSettingsData(settings)),
   };
 };
 

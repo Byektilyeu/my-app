@@ -13,7 +13,15 @@
   padding: 8px;
 }
 
-.grid-item-void {
+.container-void .grid-item-void-status {
+  background-color: #c6cdc8;
+  color: #5a5252;
+  height: 140px;
+  padding: 8px;
+}
+
+.grid-item-void,
+.grid-item-void-status {
   display: grid;
   grid-template-columns: repeat(2, 2fr);
   gap: 0px;
@@ -35,6 +43,12 @@
     height: 140px;
     padding: 8px;
   }
+  .container-void .grid-item-void-status {
+    background-color: #c6cdc8;
+    color: #5a5252;
+    height: 140px;
+    padding: 8px;
+  }
 }
 
 @media (max-width: 768px) {
@@ -52,6 +66,12 @@
     height: 140px;
     padding: 8px;
   }
+  .container-void .grid-item-void-status {
+    background-color: #c6cdc8;
+    color: #5a5252;
+    height: 140px;
+    padding: 8px;
+  }
 }
 @media (max-width: 600px) {
   .container-void {
@@ -64,6 +84,12 @@
 
   .container-void .grid-item-void {
     background-color: #80eca1;
+    color: #5a5252;
+    height: 140px;
+    padding: 8px;
+  }
+  .container-void .grid-item-void-status {
+    background-color: #c6cdc8;
     color: #5a5252;
     height: 140px;
     padding: 8px;

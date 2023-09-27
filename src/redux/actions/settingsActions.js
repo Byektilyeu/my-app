@@ -16,6 +16,13 @@ export const loadSettings = (objID) => {
   };
 };
 
+export const setSettingsData = (loadedSettings) => {
+  return {
+    type: "SETSETTINGS",
+    loadedSettings,
+  };
+};
+
 export const loadSettingsStart = () => {
   return {
     type: "LOAD_SETTINGS_START",
