@@ -66,31 +66,17 @@ function reducer(state = initProduct, action) {
 
     case DECREASE_QUANTITY:
       let quantity = state.Carts[action.payload].quantity;
-      console.log("ppppppppppppppppppppp", quantity);
-      console.log("ppppppppppppppppppppp1", state.numberCart);
-      console.log(
-        "ppppppppppppppppppppp2",
-        state.Carts[action.payload].quantity
-      );
-      if (quantity > 1) {
-        console.log(
-          "iiiiiiiiiiiiiiiiiiiiiii",
-          state.Carts[action.payload].quantity
-        );
+      if (quantity >= 1) {
         state.numberCart--;
         state.Carts[action.payload].quantity--;
       }
-      console.log(
-        "iiiiiiiiiiiiiiiiiiiiiii",
-        state.Carts[action.payload].quantity
-      );
-
       console.log("hha", state.Carts);
       return {
         ...state,
       };
 
     case DELETE_CART:
+      console.log("carts delete");
       let quantity_ = state.Carts[action.payload].quantity;
       console.log("carts", quantity_);
       return {

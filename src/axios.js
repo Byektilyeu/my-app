@@ -1,7 +1,8 @@
 import axios from "axios";
+import { SERVERAPI } from "./Constants/Routes";
 
 const instance = axios.create({
-  baseURL: "http://10.0.0.105:8011/api/v1/",
+  baseURL: `${SERVERAPI}/api/v1/`,
 });
 
 instance.defaults.withCredentials = true;

@@ -15,4 +15,4 @@ export const HALLPLAN = "/:restaurantid";
 export const TABLES = "/:restaurantid/:hallplansid";
 export const RESTAURANT = "/";
 
-export const SERVERAPI = "http://10.0.0.105:8011";
+export const SERVERAPI = "http://10.0.0.103:8011";

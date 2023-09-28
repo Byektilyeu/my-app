@@ -329,7 +329,9 @@ function CartPage(props) {
   };
 
   const DecreaseQuantityHandle = (key) => {
+    const products = props.loadedCartOrders;
     props.DecreaseQuantity(key);
+    products.map((i) => i.quantity == 0 && props.DeleteCart(key));
     setLoading(false);
   };
   const IncreaseQuantityHandle = (key) => {
@@ -430,7 +432,7 @@ function CartPage(props) {
           <MDBSpinner className="spinner" color="success" />
         )}
         {!orderPage && (
-          <div className="buttons">
+          <div>
             <button onClick={saveOrder} className="button">
               <p>Захиалга зөв байна</p>
             </button>

@@ -25,6 +25,7 @@ export function UpdateCart(payload) {
   };
 }
 export function DeleteCart(payload) {
+  console.log("delete");
   return {
     type: "DELETE_CART",
     payload,
